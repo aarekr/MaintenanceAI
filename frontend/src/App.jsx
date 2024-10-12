@@ -13,28 +13,34 @@ const App = () => {
   const [ oven, setOven ] = useState('OK')
   const [ washingMachine, setWashingMachine ] = useState('OK')
 
+  const [ repairTasks, setRepairTasks ] = useState([])
+
   const padding = {
     padding: 5
   }
+  //console.log('run simulator: ', runSimulator)
+  //console.log('APP repairTasks:', repairTasks)
 
   return (
     <Router>
       <div>
-        <Link style={padding} to="/simulator">Simulator</Link>
+        <Link style={padding} to="/">Simulator</Link>
         <Link style={padding} to="/resident">Resident</Link>
         <Link style={padding} to="/maintenance">Maintenance</Link>
       </div>
       <hr />
       <Routes>
-        <Route path="/simulator" element={<Simulator dishWasher={dishWasher} setDishWasher={setDishWasher}
+        <Route path="/" element={<Simulator dishWasher={dishWasher} setDishWasher={setDishWasher}
             doorLock={doorLock} setDoorLock={setDoorLock} oven={oven} setOven={setOven}
-            washingMachine={washingMachine} setWashingMachine={setWashingMachine} />} />
+            washingMachine={washingMachine} setWashingMachine={setWashingMachine}
+            repairTasks={repairTasks} setRepairTasks={setRepairTasks} />} />
         <Route path="/resident" element={<Resident dishWasher={dishWasher} setDishWasher={setDishWasher}
             doorLock={doorLock} setDoorLock={setDoorLock} oven={oven} setOven={setOven}
             washingMachine={washingMachine} setWashingMachine={setWashingMachine} />} />
         <Route path="/maintenance" element={<Maintenance dishWasher={dishWasher} setDishWasher={setDishWasher}
             doorLock={doorLock} setDoorLock={setDoorLock} oven={oven} setOven={setOven}
-            washingMachine={washingMachine} setWashingMachine={setWashingMachine} />} />
+            washingMachine={washingMachine} setWashingMachine={setWashingMachine}
+            repairTasks={repairTasks} />} />
       </Routes>
     </Router>
   )

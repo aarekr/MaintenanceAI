@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 
 const Maintenance = (props) => {
+    console.log('Maintenance props: ', props.repairTasks)
     const repairComponent = (device, status, setter) => {
         return (
             <div>
@@ -31,6 +32,7 @@ const Maintenance = (props) => {
             {props.washingMachine != 'OK'
                 ? repairComponent('washing machine', props.washingMachine, props.setWashingMachine)
                 : null}
+            {props.repairTasks.map(task => <li key={task.flat}>{task.flat} - {task.device} - {task.errorCode} - {task.status}</li>)}
         </div>
     )
 }
