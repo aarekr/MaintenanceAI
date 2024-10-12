@@ -104,15 +104,17 @@ const Simulator = (props) => {
 
     return (
         <div>
-            <h1>SIMULATOR</h1>
+            <h1>SIMULATORS</h1> <br />
+            <h4>Single flat simulator</h4>
             <p><button onClick={() => props.setDishWasher('BROKEN')}>break it!</button> Dish washer </p>
             <p><button onClick={() => props.setDoorLock('BROKEN')}>break it!</button> Lock </p>
             <p><button onClick={() => props.setOven('BROKEN')}>break it!</button> Oven </p>
             <p><button onClick={() => props.setWashingMachine('BROKEN')}>break it!</button> Washing machine </p>
             <hr />
+            <h4>100 flats simulator</h4>
             <button onClick={() => simulateToList()}>SIMULATE TO LIST</button>
             <hr />
-            <h4>Automatic simulator </h4>
+            <h4>Automatic simulator </h4> not in use <br />
             <button onClick={() => setRunSimulator(true)}>RUN</button> {' '}
             <button onClick={() => setRunSimulator(false)}>STOP</button> <br />
             <button onClick={() => rekursio(true)}>REKURSIO</button> <br />

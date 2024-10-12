@@ -1,9 +1,12 @@
 /* eslint-disable react/prop-types */
 
+import { Table } from "react-bootstrap"
+
 const Resident = (props) => {
     function repairComponent(device, status, setter) {
         return (
-            <div>{`Your ${device} in ${status} `} 
+            <div>{`Your ${device} in ${status} `}
+                <button>I WILL DO IT MYSELF</button> {' '} 
                 <button onClick={() => setter('IGNORED')}>IGNORE</button> {' '} 
                 <button onClick={() => setter('ASKED MAINTENANCE TO FIX')}>ASK MAINTENANCE TO FIX IT</button>
                 <br />
@@ -32,7 +35,7 @@ const Resident = (props) => {
                     : null}
             <hr />
             <h3>Your appliances</h3>
-            <table border="1">
+            <Table striped>
                 <thead>
                     <tr>
                         <th>DEVICE</th>
@@ -41,23 +44,23 @@ const Resident = (props) => {
                 </thead>
                 <tbody>
                     <tr>
-                        <th align="left">Dishwasher</th>
-                        <th>{props.dishWasher}</th>
+                        <td align="left">Dishwasher</td>
+                        <td>{props.dishWasher}</td>
                     </tr>
                     <tr>
-                        <th align="left">Door lock</th>
-                        <th>{props.doorLock}</th>
+                        <td align="left">Door lock</td>
+                        <td>{props.doorLock}</td>
                     </tr>
                     <tr>
-                        <th align="left">Oven</th>
-                        <th>{props.oven}</th>
+                        <td align="left">Oven</td>
+                        <td>{props.oven}</td>
                     </tr>
                     <tr>
-                        <th align="left">Washing machine</th>
-                        <th>{props.washingMachine}</th>
+                        <td align="left">Washing machine</td>
+                        <td>{props.washingMachine}</td>
                     </tr>
                 </tbody>
-            </table>
+            </Table>
         </div>
     )
 }

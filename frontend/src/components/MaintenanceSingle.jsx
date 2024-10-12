@@ -1,25 +1,37 @@
 /* eslint-disable react/prop-types */
 
-const Maintenance = (props) => {
+import Button from 'react-bootstrap/Button';
+import Card from 'react-bootstrap/Card';
+
+const MaintenanceSingle = (props) => {
     console.log('Maintenance props: ', props.repairTasks)
     const repairComponent = (device, status, setter) => {
         return (
             <div>
-                {`Flat 1: ${device} status is ${status}`} - {' '}
-                <button onClick={() => setter('REPAIR STARTED')}>Start</button> {' '}
-                <button onClick={() => setter('REPAIR COMPLETED')}>Complete</button> {' '}
-                <button onClick={() => setter('OK')}>Remove from list</button>
+                <Card className="text-left">
+                    <Card.Header><h3>Flat 1</h3></Card.Header>
+                    <Card.Body>
+                        <Card.Title>{device}</Card.Title>
+                        <Card.Text>Message: resident message</Card.Text>
+                        <Card.Text>Status: {status}</Card.Text>
+                        <Button variant="primary" size="sm" onClick={() => setter('REPAIR STARTED')}>Start</Button> {' '}
+                        <Button variant="success" size="sm" onClick={() => setter('REPAIR COMPLETED')}>Complete</Button> {' '}
+                        <Button variant="danger" size="sm" onClick={() => setter('OK')}>Remove</Button> {' '}
+                    </Card.Body>
+                    <Card.Footer className="text-muted">Time when notified of error</Card.Footer>
+                </Card> <br />
             </div>
         )
     }
     return (
         <div>
-            <h1>MAINTENANCE</h1>
+            <h1>MAINTENANCE SINGLE FLAT</h1>
             <hr />
             {props.dishWasher == 'OK' && props.doorLock == 'OK' && 
              props.oven == 'OK' && props.washingMachine == 'OK'
                 ? <h3>Nothing to fix</h3>
                 : <h3>Things to fix</h3>}
+            <br />
             {props.dishWasher != 'OK'
                 ? repairComponent('dish washer', props.dishWasher, props.setDishWasher)
                 : null}
@@ -32,9 +44,8 @@ const Maintenance = (props) => {
             {props.washingMachine != 'OK'
                 ? repairComponent('washing machine', props.washingMachine, props.setWashingMachine)
                 : null}
-            {props.repairTasks.map(task => <li key={task.flat}>{task.flat} - {task.device} - {task.errorCode} - {task.status}</li>)}
         </div>
     )
 }
 
-export default Maintenance
+export default MaintenanceSingle
