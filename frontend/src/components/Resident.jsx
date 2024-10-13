@@ -1,14 +1,18 @@
 /* eslint-disable react/prop-types */
 
-import { Table } from "react-bootstrap"
+import { Table, Button } from "react-bootstrap"
+import StatusBadge from "./StatusBadge"
 
 const Resident = (props) => {
     function repairComponent(device, status, setter) {
         return (
             <div>{`Your ${device} in ${status} `}
-                <button>I WILL DO IT MYSELF</button> {' '} 
-                <button onClick={() => setter('IGNORED')}>IGNORE</button> {' '} 
-                <button onClick={() => setter('ASKED MAINTENANCE TO FIX')}>ASK MAINTENANCE TO FIX IT</button>
+                <Button sm='sm' variant='warning' onClick={() => 
+                    setter('RESIDENT FIXES')}>I WILL DO IT MYSELF</Button> {' '} 
+                <Button sm='sm' variant='danger' onClick={() => 
+                    setter('IGNORED')}>IGNORE</Button> {' '} 
+                <Button sm='sm' variant='info' onClick={() => 
+                    setter('ASKED MAINTENANCE TO FIX')}>ASK MAINTENANCE TO FIX IT</Button>
                 <br />
             </div>
         )
@@ -35,32 +39,36 @@ const Resident = (props) => {
                     : null}
             <hr />
             <h3>Your appliances</h3>
-            <Table striped>
-                <thead>
-                    <tr>
-                        <th>DEVICE</th>
-                        <th>STATUS</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td align="left">Dishwasher</td>
-                        <td>{props.dishWasher}</td>
-                    </tr>
-                    <tr>
-                        <td align="left">Door lock</td>
-                        <td>{props.doorLock}</td>
-                    </tr>
-                    <tr>
-                        <td align="left">Oven</td>
-                        <td>{props.oven}</td>
-                    </tr>
-                    <tr>
-                        <td align="left">Washing machine</td>
-                        <td>{props.washingMachine}</td>
-                    </tr>
-                </tbody>
-            </Table>
+            <div className="form-group row">
+                <div className="col-4">
+                    <Table striped>
+                        <thead>
+                            <tr>
+                                <th>DEVICE</th>
+                                <th><center>STATUS</center></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td align="left">Dishwasher</td>
+                                <td align='center'>{StatusBadge(props.dishWasher)}</td>
+                            </tr>
+                            <tr>
+                                <td align="left">Door lock</td>
+                                <td align='center'>{StatusBadge(props.doorLock)}</td>
+                            </tr>
+                            <tr>
+                                <td align="left">Oven</td>
+                                <td align='center'>{StatusBadge(props.oven)}</td>
+                            </tr>
+                            <tr>
+                                <td align="left">Washing machine</td>
+                                <td align='center'>{StatusBadge(props.washingMachine)}</td>
+                            </tr>
+                        </tbody>
+                    </Table>
+                </div>
+            </div>
         </div>
     )
 }

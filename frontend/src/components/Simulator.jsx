@@ -5,6 +5,7 @@ import { useState } from "react"
 const Simulator = (props) => {
     const [ runSimulator, setRunSimulator ] = useState(false)
     const [ recursionTime, setRecursionTime ] = useState(1000)
+    //const [ simulatorNotification, setSimulatorNotification ] = useState('')
     const [ lista, setLista ] = useState([])
     const [ counter, setCounter ] = useState(0)
 
@@ -80,17 +81,19 @@ const Simulator = (props) => {
 
 
     const simulateToList = () => {
-        let flatNumber = Math.floor(100 * Math.random().toFixed(2))
-        //console.log('---> machine breaks, flat number:', flatNumber)
+        let flatNumber = 1 + Math.floor(100 * Math.random())
         let randomDevice = Math.floor(5 * Math.random())
-        //console.log('---> device:', randomDevice, devices[randomDevice])
         let randomError = Math.floor(5 * Math.random())
-        //console.log('---> randomError:', randomError, 'errorCode:', errorCodes[randomError])
+        let errorCode = errorCodes[randomError]
         let newTaskObject = {
             'flat': flatNumber,
             'device': devices[randomDevice],
-            'errorCode': errorCodes[randomError],
-            'status': 'NA'
+            'errorCode': errorCode,
+            'status': errorCode == 101
+                ? 'BROKEN'
+                : errorCode == 102 || errorCode == 103
+                    ? 'MAINTENANCE'
+                    : 'NA'
         }
         console.log('newTaskObject:', newTaskObject)
         //handleSimulateToList(newTaskObject)
@@ -112,7 +115,7 @@ const Simulator = (props) => {
             <p><button onClick={() => props.setWashingMachine('BROKEN')}>break it!</button> Washing machine </p>
             <hr />
             <h4>100 flats simulator</h4>
-            <button onClick={() => simulateToList()}>SIMULATE TO LIST</button>
+            <button onClick={() => simulateToList()}>SIMULATE TO LIST</button> {' '}
             <hr />
             <h4>Automatic simulator </h4> not in use <br />
             <button onClick={() => setRunSimulator(true)}>RUN</button> {' '}
