@@ -1,26 +1,18 @@
-/* eslint-disable react/prop-types */
-
 import { useState } from "react"
 
 const Simulator = (props) => {
-    const [ runSimulator, setRunSimulator ] = useState(false)
-    const [ recursionTime, setRecursionTime ] = useState(1000)
+    //const [ runSimulator, setRunSimulator ] = useState(false)
+    //const [ recursionTime, setRecursionTime ] = useState(1000)
     //const [ simulatorNotification, setSimulatorNotification ] = useState('')
-    const [ lista, setLista ] = useState([])
     const [ counter, setCounter ] = useState(0)
+    //const [ newTask, setNewTask ] = useState('')
 
     let devices = ['dishwasher', 'microwave', 'oven', 'stove', 'washing machine']
     let errorCodes = [101, 102, 103, 104, 105]
 
-    const handleListaAddition = () => {
-        console.log('---> handleListaAddition, lista:', lista, counter)
-        setLista(lista)
-        setCounter(counter + 1)
-        console.log('---> handleListaAddition, lista:', lista, counter)
-    }
 
-    const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay))
-    const greet = async () => {
+    //const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay))
+    /*const greet = async () => {
         while (runSimulator) {
             if (runSimulator == false) {
                 break
@@ -55,30 +47,9 @@ const Simulator = (props) => {
             console.log('lista:', lista)
             //console.log('counter:', counter)
         }
-    }
-
-    console.log('runSimulator: ', runSimulator)
-    //let arvo = true
-    function rekursio(arvo) {
-        console.log('rekursio: ', runSimulator)
-        setTimeout(() => {
-            rekursio(arvo)
-        }, 1000)
-    }
-    /*const simulateEvents = () => {
-        if (runSimulator == undefined) {
-            console.log('UNDEFINED', runSimulator)
-        } else if (runSimulator == true) {
-            console.log('TRUE', runSimulator)
-        } else if (runSimulator == false) {
-            console.log('FALSE', runSimulator)
-        }
     }*/
-    /*setInterval(() => {
-        console.log('interval')
-        simulateEvents()
-    }, 1000)*/
 
+    //console.log('runSimulator: ', runSimulator)
 
     const simulateToList = () => {
         let flatNumber = 1 + Math.floor(100 * Math.random())
@@ -99,10 +70,35 @@ const Simulator = (props) => {
         //handleSimulateToList(newTaskObject)
         console.log('handleSimulateToList')
         setCounter(counter + 1)
-        setLista(lista.concat(newTaskObject))
+        //setNewTask(newTaskObject)
+        //setLista(lista.concat(newTaskObject))
         props.setRepairTasks(props.repairTasks.concat(newTaskObject))
-        console.log('list after addition:', lista)
+        //console.log('list after addition:', lista)
         console.log('repairTasks after addition:', props.repairTasks)
+    }
+
+    const simulateNine = () => {
+        /*setTimeout(() => {
+            let newTaskObject = {
+                'flat': 1 + Math.floor(100 * Math.random()),
+                'device': devices[Math.floor(5 * Math.random())],
+                'errorCode': 101,
+                'status': 'BROKEN'
+            }
+            console.log('newTaskObject:', newTaskObject)
+            setNewTask(newTaskObject)
+            props.setRepairTasks(props.repairTasks.concat(newTask))
+            setNewTask('')
+        }, 1000)*/
+        setTimeout(() => {
+            simulateToList()
+        }, 1000)
+        setTimeout(() => {
+            simulateToList()
+        }, 1500)
+        setTimeout(() => {
+            simulateToList()
+        }, 2000)
     }
 
     return (
@@ -116,13 +112,8 @@ const Simulator = (props) => {
             <hr />
             <h4>100 flats simulator</h4>
             <button onClick={() => simulateToList()}>SIMULATE TO LIST</button> {' '}
+            <button onClick={() => simulateNine()}>SIMULATE 9</button> {' '}
             <hr />
-            <h4>Automatic simulator </h4> not in use <br />
-            <button onClick={() => setRunSimulator(true)}>RUN</button> {' '}
-            <button onClick={() => setRunSimulator(false)}>STOP</button> <br />
-            <button onClick={() => rekursio(true)}>REKURSIO</button> <br />
-            <button onClick={() => greet()}>GREET</button> {' '}
-            <button onClick={() => setRecursionTime(100000)}>100000</button> 
         </div>
     )
 }

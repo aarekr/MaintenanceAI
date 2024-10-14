@@ -1,20 +1,19 @@
-/* eslint-disable react/prop-types */
-
+import { Link } from 'react-router-dom'
 import { Table, Button } from "react-bootstrap"
 import StatusBadge from "./StatusBadge"
 
 const Resident = (props) => {
     function repairComponent(device, status, setter) {
         return (
-            <div>{`Your ${device} in ${status} `}
-                <Button sm='sm' variant='warning' onClick={() => 
-                    setter('RESIDENT FIXES')}>I WILL DO IT MYSELF</Button> {' '} 
-                <Button sm='sm' variant='danger' onClick={() => 
-                    setter('IGNORED')}>IGNORE</Button> {' '} 
-                <Button sm='sm' variant='info' onClick={() => 
-                    setter('ASKED MAINTENANCE TO FIX')}>ASK MAINTENANCE TO FIX IT</Button>
-                <br />
-            </div>
+            <tr>
+                <td>{`Your ${device} in ${status} `} {' '}</td>
+                <td><Button sm='sm' variant='warning' onClick={() => 
+                    setter('RESIDENT FIXES')}>I WILL DO IT MYSELF</Button> {' '} </td>
+                <td><Button sm='sm' variant='danger' onClick={() => 
+                    setter('IGNORED')}>IGNORE</Button> {' '} </td>
+                <td><Button sm='sm' variant='info' onClick={() => 
+                    setter('ASKED MAINTENANCE TO FIX')}>ASK MAINTENANCE TO FIX IT</Button></td>
+            </tr>
         )
     }
     return (
@@ -25,22 +24,26 @@ const Resident = (props) => {
              props.oven == 'OK' && props.washingMachine == 'OK'
                 ? <h3>All you appliances are working fine</h3>
                 : null}
-            {props.dishWasher == 'BROKEN'
-                    ? repairComponent('dishwasher', props.dishWasher, props.setDishWasher)
-                    : null}
-            {props.doorLock == 'BROKEN'
-                    ? repairComponent('door lock', props.doorLock, props.setDoorLock)
-                    : null}
-            {props.oven == 'BROKEN'
-                    ? repairComponent('oven', props.oven, props.setOven)
-                    : null}
-            {props.washingMachine == 'BROKEN'
-                    ? repairComponent('washing machine', props.washingMachine, props.setWashingMachine)
-                    : null}
+            <table>
+                <tbody>
+                {props.dishWasher == 'BROKEN'
+                        ? repairComponent('dishwasher', props.dishWasher, props.setDishWasher)
+                        : null}
+                {props.doorLock == 'BROKEN'
+                        ? repairComponent('door lock', props.doorLock, props.setDoorLock)
+                        : null}
+                {props.oven == 'BROKEN'
+                        ? repairComponent('oven', props.oven, props.setOven)
+                        : null}
+                {props.washingMachine == 'BROKEN'
+                        ? repairComponent('washing machine', props.washingMachine, props.setWashingMachine)
+                        : null}
+                </tbody>
+            </table>
             <hr />
             <h3>Your appliances</h3>
             <div className="form-group row">
-                <div className="col-4">
+                <div className="col-5">
                     <Table striped>
                         <thead>
                             <tr>
@@ -51,19 +54,27 @@ const Resident = (props) => {
                         <tbody>
                             <tr>
                                 <td align="left">Dishwasher</td>
-                                <td align='center'>{StatusBadge(props.dishWasher)}</td>
+                                <td align='center'>{props.dishWasher == 'RESIDENT FIXES'
+                                    ? <Link to="/doityourself">Do it yourself page</Link>
+                                    : StatusBadge(props.dishWasher)}</td>
                             </tr>
                             <tr>
                                 <td align="left">Door lock</td>
-                                <td align='center'>{StatusBadge(props.doorLock)}</td>
+                                <td align='center'>{props.doorLock == 'RESIDENT FIXES'
+                                    ? <Link to="/doityourself">Do it yourself page</Link>
+                                    : StatusBadge(props.doorLock)}</td>
                             </tr>
                             <tr>
                                 <td align="left">Oven</td>
-                                <td align='center'>{StatusBadge(props.oven)}</td>
+                                <td align='center'>{props.oven == 'RESIDENT FIXES'
+                                    ? <Link to="/doityourself">Do it yourself page</Link>
+                                    : StatusBadge(props.oven)}</td>
                             </tr>
                             <tr>
                                 <td align="left">Washing machine</td>
-                                <td align='center'>{StatusBadge(props.washingMachine)}</td>
+                                <td align='center'>{props.washingMachine == 'RESIDENT FIXES'
+                                    ? <Link to="/doityourself">Do it yourself page</Link>
+                                    : StatusBadge(props.washingMachine)}</td>
                             </tr>
                         </tbody>
                     </Table>
