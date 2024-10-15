@@ -41,7 +41,52 @@ const Maintenance100 = (props) => {
                 : <h3>Things to fix</h3>}
             <br />
             <h3>Cases in toast format</h3>
-            {filteredTasks.sort((a,b) => a.errorCode - b.errorCode).map(task =>
+            {filteredTasks
+                .filter(task => task.errorCode == 101)
+                .sort((a,b) => a.errorCode - b.errorCode)
+                .map(task =>
+                <Toast className="d-inline-block m-1" bg={toastBGColor(task.errorCode)} key={task.flat}>
+                    <Toast.Header>
+                        <img src="holder.js/20x20?text=%20" className="rounded me-2" alt=""/>
+                        <h4 className="me-auto">Flat {task.flat}</h4>
+                        <h5>{StatusBadge(task.status)}</h5>
+                    </Toast.Header>
+                    <Toast.Body className={'text-white'}>
+                        <h5>{task.device} - {task.errorCode}</h5>
+                        <button onClick={() => 
+                            handleRepairStatusChange(task, 'REPAIR STARTED')}>START</button> {' '}
+                        <button onClick={() => 
+                            handleRepairStatusChange(task, 'REPAIR COMPLETED')}>COMPLETE</button> {' '}
+                        <button onClick={() => 
+                            handleRepairStatusChange(task, 'OK')}>REMOVE</button>
+                    </Toast.Body>
+                </Toast>
+            )} <br />
+            {filteredTasks
+                .filter(task => task.errorCode == 102 || task.errorCode == 103)
+                .sort((a,b) => a.errorCode - b.errorCode)
+                .map(task =>
+                <Toast className="d-inline-block m-1" bg={toastBGColor(task.errorCode)} key={task.flat}>
+                    <Toast.Header>
+                        <img src="holder.js/20x20?text=%20" className="rounded me-2" alt=""/>
+                        <h4 className="me-auto">Flat {task.flat}</h4>
+                        <h5>{StatusBadge(task.status)}</h5>
+                    </Toast.Header>
+                    <Toast.Body className={'text-white'}>
+                        <h5>{task.device} - {task.errorCode}</h5>
+                        <button onClick={() => 
+                            handleRepairStatusChange(task, 'REPAIR STARTED')}>START</button> {' '}
+                        <button onClick={() => 
+                            handleRepairStatusChange(task, 'REPAIR COMPLETED')}>COMPLETE</button> {' '}
+                        <button onClick={() => 
+                            handleRepairStatusChange(task, 'OK')}>REMOVE</button>
+                    </Toast.Body>
+                </Toast>
+            )} <br />
+            {filteredTasks
+                .filter(task => task.errorCode == 104 || task.errorCode == 105)
+                .sort((a,b) => a.errorCode - b.errorCode)
+                .map(task =>
                 <Toast className="d-inline-block m-1" bg={toastBGColor(task.errorCode)} key={task.flat}>
                     <Toast.Header>
                         <img src="holder.js/20x20?text=%20" className="rounded me-2" alt=""/>

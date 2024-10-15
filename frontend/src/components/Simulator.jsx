@@ -77,28 +77,29 @@ const Simulator = (props) => {
         console.log('repairTasks after addition:', props.repairTasks)
     }
 
-    const simulateNine = () => {
-        /*setTimeout(() => {
-            let newTaskObject = {
-                'flat': 1 + Math.floor(100 * Math.random()),
-                'device': devices[Math.floor(5 * Math.random())],
-                'errorCode': 101,
-                'status': 'BROKEN'
-            }
-            console.log('newTaskObject:', newTaskObject)
-            setNewTask(newTaskObject)
-            props.setRepairTasks(props.repairTasks.concat(newTask))
-            setNewTask('')
-        }, 1000)*/
-        setTimeout(() => {
-            simulateToList()
-        }, 1000)
-        setTimeout(() => {
-            simulateToList()
-        }, 1500)
-        setTimeout(() => {
-            simulateToList()
-        }, 2000)
+    const simulateColor = (color) => {
+        let flatNumber = 1 + Math.floor(100 * Math.random())
+        let randomDevice = Math.floor(5 * Math.random())
+        let errorCode = 1
+        if (color == 'red') {
+            errorCode = errorCodes[0]
+        } else if (color == 'yellow') {
+            errorCode = Math.random() > 0.5 ? errorCodes[1] : errorCodes[2]
+        } else if (color == 'third') {
+            errorCode = Math.random() > 0.5 ? errorCodes[3] : errorCodes[4]
+        }
+        let newTaskObject = {
+            'flat': flatNumber,
+            'device': devices[randomDevice],
+            'errorCode': errorCode,
+            'status': errorCode == 101
+                ? 'BROKEN'
+                : errorCode == 102 || errorCode == 103
+                    ? 'MAINTENANCE'
+                    : 'NA'
+        }
+        setCounter(counter + 1)
+        props.setRepairTasks(props.repairTasks.concat(newTaskObject))
     }
 
     return (
@@ -111,8 +112,10 @@ const Simulator = (props) => {
             <p><button onClick={() => props.setWashingMachine('BROKEN')}>break it!</button> Washing machine </p>
             <hr />
             <h4>100 flats simulator</h4>
-            <button onClick={() => simulateToList()}>SIMULATE TO LIST</button> {' '}
-            <button onClick={() => simulateNine()}>SIMULATE 9</button> {' '}
+            <button onClick={() => simulateToList()}>SIMULATE TO LIST</button> {' '} - {' '}
+            <button onClick={() => simulateColor('red')}>RED</button> {' '}
+            <button onClick={() => simulateColor('yellow')}>YELLOW</button> {' '}
+            <button onClick={() => simulateColor('third')}>THIRD</button> {' '}
             <hr />
         </div>
     )
