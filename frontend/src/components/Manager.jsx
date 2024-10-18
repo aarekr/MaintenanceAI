@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Table, Button } from "react-bootstrap"
-import Badge from 'react-bootstrap/Badge';
 import StatusBadge from "./StatusBadge";
+import ErrorBadge from "./ErrorBadge";
 
 const Manager = (props) => {
     console.log('Maintenance props: ', props.repairTasks)
@@ -26,7 +26,7 @@ const Manager = (props) => {
     if (props.repairTasks.length == 0) {
         return (
             <div>
-                <h1>MAINTENANCE - 100 FLATS</h1>
+                <h1>MAINTENANCE - 1000 FLATS</h1>
                 <hr />
                 <h3>Nothing to fix</h3>
             </div>
@@ -35,13 +35,10 @@ const Manager = (props) => {
 
     return (
         <div>
-            <h1>MAINTENANCE - 100 FLATS</h1>
+            <h1>MAINTENANCE - 1000 FLATS</h1>
             <hr />
-            {props.repairTasks.length == 0
-                ? <h3>Nothing to fix</h3>
-                : <h3>Things to fix</h3>}
+            <h3>Work list</h3>
             <br />
-            <h3>Cases in a list format</h3>
             <Table striped>
                 <thead>
                     <tr>
@@ -92,13 +89,6 @@ const Manager = (props) => {
             </Table>
         </div>
     )
-}
-
-const ErrorBadge = (errorCode) => {
-    if (errorCode == 101) return <Badge pill bg='danger'>{errorCode}</Badge>
-    else if (errorCode == 102 || errorCode == 103) return <Badge pill bg='warning'>{errorCode}</Badge>
-    else if (errorCode == 104 || errorCode == 105) return <Badge pill bg='secondary'>{errorCode}</Badge>
-    else return <Badge pill bg='info'>{errorCode}</Badge>
 }
 
 export default Manager

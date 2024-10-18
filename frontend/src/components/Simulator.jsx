@@ -1,58 +1,14 @@
 import { useState } from "react"
+import Button from 'react-bootstrap/Button';
 
 const Simulator = (props) => {
-    //const [ runSimulator, setRunSimulator ] = useState(false)
-    //const [ recursionTime, setRecursionTime ] = useState(1000)
-    //const [ simulatorNotification, setSimulatorNotification ] = useState('')
     const [ counter, setCounter ] = useState(0)
-    //const [ newTask, setNewTask ] = useState('')
 
-    let devices = ['dishwasher', 'microwave', 'oven', 'stove', 'washing machine']
+    let devices = ['Dishwasher', 'Microwave', 'Oven', 'Stove', 'Washing machine']
     let errorCodes = [101, 102, 103, 104, 105]
 
-
-    //const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay))
-    /*const greet = async () => {
-        while (runSimulator) {
-            if (runSimulator == false) {
-                break
-            }
-            await sleep(recursionTime)
-            let luku = Math.random()
-            console.log('while:', luku, runSimulator, recursionTime)
-            if (luku < 0.2) {
-                let flatNumber = Math.floor(100 * Math.random().toFixed(2))
-                //console.log('---> machine breaks, flat number:', flatNumber)
-                let randomDevice = Math.floor(5 * Math.random())
-                //console.log('---> device:', randomDevice, devices[randomDevice])
-                let randomError = Math.floor(5 * Math.random())
-                //console.log('---> randomError:', randomError, 'errorCode:', errorCodes[randomError])
-                let newTaskObject = {
-                    'flat': flatNumber,
-                    'device': devices[randomDevice],
-                    'errorCode': errorCodes[randomError]
-                }
-                console.log('newTaskObject:', newTaskObject)
-                //props.setRepairTasks(props.repairTasks.push(newTaskObject))  // shows right number but no data
-                //props.repairTasks = props.repairTasks.concat(newTaskObject)
-                //props.setRepairsTasks(props.repairTasks)
-                //lista = lista.concat('L')
-                //lista = lista.concat(newTaskObject)
-                //setLista(lista.concat('l'))
-                handleListaAddition()
-                //props.setRepairTasks(lista)
-                //setCounter(counter + 1)
-            }
-            console.log('repairTasks:', props.repairTasks)
-            console.log('lista:', lista)
-            //console.log('counter:', counter)
-        }
-    }*/
-
-    //console.log('runSimulator: ', runSimulator)
-
     const simulateToList = () => {
-        let flatNumber = 1 + Math.floor(100 * Math.random())
+        let flatNumber = 1 + Math.floor(1000 * Math.random())
         let randomDevice = Math.floor(5 * Math.random())
         let randomError = Math.floor(5 * Math.random())
         let errorCode = errorCodes[randomError]
@@ -64,7 +20,8 @@ const Simulator = (props) => {
                 ? 'BROKEN'
                 : errorCode == 102 || errorCode == 103
                     ? 'MAINTENANCE'
-                    : 'NA'
+                    : 'NA',
+            'timeTicketCreated': new Date()
         }
         console.log('newTaskObject:', newTaskObject)
         //handleSimulateToList(newTaskObject)
@@ -78,7 +35,7 @@ const Simulator = (props) => {
     }
 
     const simulateColor = (color) => {
-        let flatNumber = 1 + Math.floor(100 * Math.random())
+        let flatNumber = 1 + Math.floor(1000 * Math.random())
         let randomDevice = Math.floor(5 * Math.random())
         let errorCode = 1
         if (color == 'red') {
@@ -96,7 +53,9 @@ const Simulator = (props) => {
                 ? 'BROKEN'
                 : errorCode == 102 || errorCode == 103
                     ? 'MAINTENANCE'
-                    : 'NA'
+                    : 'NA',
+            'timeTicketCreated': new Date(),
+            'residentMessage': '...',
         }
         setCounter(counter + 1)
         props.setRepairTasks(props.repairTasks.concat(newTaskObject))
@@ -106,16 +65,16 @@ const Simulator = (props) => {
         <div>
             <h1>SIMULATORS</h1> <br />
             <h4>Single flat simulator</h4>
-            <p><button onClick={() => props.setDishWasher('BROKEN')}>break it!</button> Dish washer </p>
-            <p><button onClick={() => props.setDoorLock('BROKEN')}>break it!</button> Lock </p>
-            <p><button onClick={() => props.setOven('BROKEN')}>break it!</button> Oven </p>
-            <p><button onClick={() => props.setWashingMachine('BROKEN')}>break it!</button> Washing machine </p>
+            <p><button onClick={() => props.setDishWasher('BROKEN')}>Break it!</button> Dish washer </p>
+            <p><button onClick={() => props.setDoorLock('BROKEN')}>Break it!</button> Lock </p>
+            <p><button onClick={() => props.setOven('BROKEN')}>Break it!</button> Oven </p>
+            <p><button onClick={() => props.setWashingMachine('BROKEN')}>Break it!</button> Washing machine </p>
             <hr />
-            <h4>100 flats simulator</h4>
+            <h4>1000 flats simulator</h4>
             <button onClick={() => simulateToList()}>SIMULATE TO LIST</button> {' '} - {' '}
-            <button onClick={() => simulateColor('red')}>RED</button> {' '}
-            <button onClick={() => simulateColor('yellow')}>YELLOW</button> {' '}
-            <button onClick={() => simulateColor('third')}>THIRD</button> {' '}
+            <Button size='sm' variant='danger' onClick={() => simulateColor('red')}>RED</Button> {' '}
+            <Button size='sm' variant='warning' onClick={() => simulateColor('yellow')}>YELLOW</Button> {' '}
+            <Button size='sm' variant='secondary' onClick={() => simulateColor('third')}>GREY</Button> {' '}
             <hr />
         </div>
     )

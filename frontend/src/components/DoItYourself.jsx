@@ -7,6 +7,7 @@ const DoItYourself = ({ residentDeviceList, residentDeviceListStatuses,
     const [ electricity, setElectricity ] = useState('')
     const [ unplugging, setUnplugging ] = useState('')
     const [ functions, setFunctions ] = useState('')
+    const [ eCode, setECode ] = useState('')
 
     const showDeviceDetails = (device, status) => {
         return (
@@ -48,11 +49,17 @@ const DoItYourself = ({ residentDeviceList, residentDeviceListStatuses,
                                 setFunctions('yes')}}>YES</button> {' '}
                             <button onClick={() => setFunctions('no')}>NO</button> {' '}</p>
                         : null}
-                    {status == 101 && electricity == 'yes' && functions == 'no'
+                    {status == 101 && electricity == 'yes' && functions == 'no' && eCode == ''
                         ? <p>Does the device show any error codes? {' '}
-                            <button>YES: E345</button> {' '}
-                            <button>YES: E765</button> {' '}
+                            <button onClick={() => setECode('E345')}>YES: E345</button> {' '}
+                            <button onClick={() => setECode('E765')}>YES: E765</button> {' '}
                             <button>NO</button> {' '}</p>
+                        : null}
+                    {status == 101 && electricity == 'yes' && functions == 'no' && eCode == 'E345'
+                        ? <p>Link to video showing how to fix error E345</p>
+                        : null}
+                    {status == 101 && electricity == 'yes' && functions == 'no' && eCode == 'E765'
+                        ? <p>Link to video showing how to fix error E765</p>
                         : null}
                     <hr />
                 </div>

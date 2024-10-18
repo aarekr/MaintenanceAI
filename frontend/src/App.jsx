@@ -5,13 +5,14 @@ import {
 import { Navbar, Nav } from 'react-bootstrap'
 import Simulator from './components/Simulator'
 import MaintenanceSingle from './components/MaintenanceSingle'
-import Maintenance100 from './components/Maintenance100'
+import Maintenance1000 from './components/Maintenance1000'
 import Resident from './components/Resident'
 import { useState } from 'react'
 import DoItYourself from './components/DoItYourself'
 import Manager from './components/Manager'
 
 const App = () => {
+  // single flat items
   const [ dishWasher, setDishWasher ] = useState('OK')
   const [ doorLock, setDoorLock ] = useState('OK')
   const [ oven, setOven ] = useState('OK')
@@ -43,8 +44,8 @@ const App = () => {
             <Nav.Link href="/maintenance-single" as="span">
               <Link style={padding} to="/maintenance-single">Maintenance-single</Link>
             </Nav.Link>
-            <Nav.Link href="/maintenance-100" as="span">
-              <Link style={padding} to="/maintenance-100">Maintenance-100</Link>
+            <Nav.Link href="/maintenance-1000" as="span">
+              <Link style={padding} to="/maintenance-1000">Maintenance-1000</Link>
             </Nav.Link>
             <Nav.Link href="/manager" as="span">
               <Link style={padding} to="/manager">Manager</Link>
@@ -71,7 +72,12 @@ const App = () => {
           oven={oven} setOven={setOven}
           washingMachine={washingMachine} setWashingMachine={setWashingMachine}
           repairTasks={repairTasks} />} />
-        <Route path="/maintenance-100" element={<Maintenance100
+        <Route path="/doityourself" element={<DoItYourself
+          residentDeviceList={residentDeviceList}
+          residentDeviceListStatuses={residentDeviceListStatuses}
+          dishWasher={dishWasher} setDishWasher={setDishWasher} />} />
+
+        <Route path="/maintenance-1000" element={<Maintenance1000
           dishWasher={dishWasher} setDishWasher={setDishWasher}
           doorLock={doorLock} setDoorLock={setDoorLock}
           oven={oven} setOven={setOven}
@@ -83,10 +89,6 @@ const App = () => {
           oven={oven} setOven={setOven}
           washingMachine={washingMachine} setWashingMachine={setWashingMachine}
           repairTasks={repairTasks} />} />
-        <Route path="/doityourself" element={<DoItYourself
-          residentDeviceList={residentDeviceList}
-          residentDeviceListStatuses={residentDeviceListStatuses}
-          dishWasher={dishWasher} setDishWasher={setDishWasher} />} />
       </Routes>
     </Router>
   )

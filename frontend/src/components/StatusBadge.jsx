@@ -7,9 +7,9 @@ const StatusBadge = (status) => {
     else if (status == 'RESIDENT FIXES') return <Badge bg='warning'>{status}</Badge>
     else if (status == 'MAINTENANCE') return <Badge bg='warning'>{status}</Badge>
     else if (status == 'IGNORED') return <Badge bg='secondary'>{status}</Badge>
-    else if (status == 'REPAIR STARTED') return <Badge bg='dark'>{status}</Badge>
+    else if (status == 'REPAIR STARTED') return <Badge bg='primary'>{status}</Badge>
     else if (status == 'REPAIR COMPLETED') return <Badge bg='success'>{status}</Badge>
-    return <Badge bg='primary'>{status}</Badge>
+    return <Badge bg='dark'>{status}</Badge>
 }
 
 export default StatusBadge
