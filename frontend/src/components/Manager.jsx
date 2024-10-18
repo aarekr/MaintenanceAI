@@ -1,10 +1,12 @@
+import { Link } from 'react-router-dom'
+
 import { useState } from "react";
 import { Table, Button } from "react-bootstrap"
 import StatusBadge from "./StatusBadge";
 import ErrorBadge from "./ErrorBadge";
 
 const Manager = (props) => {
-    console.log('Maintenance props: ', props.repairTasks)
+    console.log('Manager maintenance props: ', props.repairTasks)
     const [ taskUpdate, setTaskUpdate ] = useState(0)
     const [ searchFlat, setSearchFlat ] = useState('')
     const [ searchDevice, setSearchDevice ] = useState('')
@@ -71,7 +73,7 @@ const Manager = (props) => {
                         .filter(task => task.status.toLowerCase().includes(searchStatus.toLowerCase()))
                         .sort((a,b) => a.errorCode - b.errorCode).map(task =>
                         <tr key={task.flat}>
-                            <td>{task.flat}</td>
+                            <td><Link to={`/flat/${task.flat}`}>{task.flat}</Link></td>
                             <td>{task.device}</td>
                             <td><center>{ErrorBadge(task.errorCode)}</center></td>
                             <td><center>{StatusBadge(task.status)}</center></td>

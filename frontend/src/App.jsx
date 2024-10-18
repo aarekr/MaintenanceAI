@@ -10,6 +10,7 @@ import Resident from './components/Resident'
 import { useState } from 'react'
 import DoItYourself from './components/DoItYourself'
 import Manager from './components/Manager'
+import Flat from './components/Flat'
 
 const App = () => {
   // single flat items
@@ -77,6 +78,7 @@ const App = () => {
           residentDeviceListStatuses={residentDeviceListStatuses}
           dishWasher={dishWasher} setDishWasher={setDishWasher} />} />
 
+        <Route path="/flat/:id" element={<Flat repairTasks={repairTasks} />} />
         <Route path="/maintenance-1000" element={<Maintenance1000
           dishWasher={dishWasher} setDishWasher={setDishWasher}
           doorLock={doorLock} setDoorLock={setDoorLock}

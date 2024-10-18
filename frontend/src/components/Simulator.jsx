@@ -7,7 +7,7 @@ const Simulator = (props) => {
     let devices = ['Dishwasher', 'Microwave', 'Oven', 'Stove', 'Washing machine']
     let errorCodes = [101, 102, 103, 104, 105]
 
-    const simulateToList = () => {
+    /*const simulateToList = () => {
         let flatNumber = 1 + Math.floor(1000 * Math.random())
         let randomDevice = Math.floor(5 * Math.random())
         let randomError = Math.floor(5 * Math.random())
@@ -21,6 +21,7 @@ const Simulator = (props) => {
                 : errorCode == 102 || errorCode == 103
                     ? 'MAINTENANCE'
                     : 'NA',
+            'repairMeasure': 'NA',
             'timeTicketCreated': new Date()
         }
         console.log('newTaskObject:', newTaskObject)
@@ -32,7 +33,7 @@ const Simulator = (props) => {
         props.setRepairTasks(props.repairTasks.concat(newTaskObject))
         //console.log('list after addition:', lista)
         console.log('repairTasks after addition:', props.repairTasks)
-    }
+    }*/
 
     const simulateColor = (color) => {
         let flatNumber = 1 + Math.floor(1000 * Math.random())
@@ -54,12 +55,15 @@ const Simulator = (props) => {
                 : errorCode == 102 || errorCode == 103
                     ? 'MAINTENANCE'
                     : 'NA',
+            'repairMeasure': 'NA',
             'timeTicketCreated': new Date(),
             'residentMessage': '...',
         }
         setCounter(counter + 1)
         props.setRepairTasks(props.repairTasks.concat(newTaskObject))
     }
+
+    // <button onClick={() => simulateToList()}>SIMULATE TO LIST</button> {' '} - {' '}
 
     return (
         <div>
@@ -71,7 +75,6 @@ const Simulator = (props) => {
             <p><button onClick={() => props.setWashingMachine('BROKEN')}>Break it!</button> Washing machine </p>
             <hr />
             <h4>1000 flats simulator</h4>
-            <button onClick={() => simulateToList()}>SIMULATE TO LIST</button> {' '} - {' '}
             <Button size='sm' variant='danger' onClick={() => simulateColor('red')}>RED</Button> {' '}
             <Button size='sm' variant='warning' onClick={() => simulateColor('yellow')}>YELLOW</Button> {' '}
             <Button size='sm' variant='secondary' onClick={() => simulateColor('third')}>GREY</Button> {' '}

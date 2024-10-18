@@ -28,7 +28,11 @@ const Maintenance1000 = (props) => {
                         <Card.Title>{task.device}</Card.Title>
                         <Card.Text>Status: {StatusBadge(task.status)}</Card.Text>
                         <Card.Text>Error code: {ErrorBadge(task.errorCode)} : explanation</Card.Text>
-                        <Card.Text>Message: {task.residentMessage}</Card.Text>
+                        <Card.Text>Repair measure: {task.repairMeasure} {' '}
+                            <button>fix</button> {' '}
+                            <button>replace</button> {' '}
+                        </Card.Text>
+                        <Card.Text>Message from resident: {task.residentMessage}</Card.Text>
                         <Button variant="primary" size="sm" onClick={() => 
                             handleRepairStatusChange(task, 'REPAIR STARTED')}>Start</Button> {' '}
                         <Button variant="success" size="sm" onClick={() => 
