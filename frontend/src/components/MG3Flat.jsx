@@ -3,9 +3,9 @@ import { Table } from "react-bootstrap"
 import StatusBadge from "./StatusBadge"
 
 const Flat = (props) => {
-    console.log('Flat props 2:', props.assignableTasks)
+    console.log('MG3Flat props:', props)
     const id = Number(useParams().id)
-    let thisFlat = props.assignableTasks.filter(flat => id == flat['flat'])[0]
+    let thisFlat = props.repairTasks.filter(flat => id == flat['flat'])[0]
     console.log('thisFlat:', thisFlat)
     if (thisFlat == undefined) {
         return (
@@ -33,7 +33,6 @@ const Flat = (props) => {
                                 <th>SERVICE MEASURE</th>
                                 <th>TIME OF BREAKDOWN</th>
                                 <th>ESTIMATED REPAIR</th>
-                                <th>EMPLOYEE</th>
                                 <th>DEVICE DETAILS</th>
                             </tr>
                         </thead>
@@ -44,7 +43,6 @@ const Flat = (props) => {
                                 <td align='center'>{thisFlat.repairMeasure}</td>
                                 <td>{timeOnTicket}</td>
                                 <td>estimated time</td>
-                                <td>{thisFlat.employee}</td>
                                 <td>details</td>
                             </tr>
                         </tbody>

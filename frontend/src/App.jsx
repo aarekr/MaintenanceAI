@@ -94,7 +94,7 @@ const App = () => {
           residentDeviceListStatuses={residentDeviceListStatuses}
           dishWasher={dishWasher} setDishWasher={setDishWasher} />} />
 
-        <Route path="/flat/:id" element={<Flat repairTasks={repairTasks} />} />
+        <Route path="/flat/:id" element={<Flat assignableTasks={assignableTasks} />} />
         <Route path="/maintenance-1000" element={<Maintenance1000
           dishWasher={dishWasher} setDishWasher={setDishWasher}
           doorLock={doorLock} setDoorLock={setDoorLock}

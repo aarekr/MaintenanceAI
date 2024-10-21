@@ -67,7 +67,7 @@ const Simulator = (props) => {
     }
 
     const simulateAndAssignTask = (color) => {
-        console.log('simulateAndAssign color:', color)
+        //console.log('simulateAndAssign color:', color)
         let flatNumber = 1 + Math.floor(1000 * Math.random())
         let randomDevice = Math.floor(5 * Math.random())
         let errorCode = 1
@@ -78,13 +78,9 @@ const Simulator = (props) => {
         } else if (color == 'third') {
             errorCode = Math.random() > 0.5 ? errorCodes[3] : errorCodes[4]
         }
-        let employee = employeeList[(Math.floor(Math.random() * employeeList.length))]
-        console.log('random employee:', employee)
+        let employee;
         if (errorCode == 101) {
             console.log('going through assignableTasks:', props.assignableTasks.map(task => task.employee))
-            /*console.log('count matti:', props.assignableTasks.filter((task) => task.employee == 'matti').length)
-            console.log('count pekka:', props.assignableTasks.filter((task) => task.employee == 'pekka').length)
-            console.log('count timo :', props.assignableTasks.filter((task) => task.employee == 'timo').length)*/
             let counts = [
                 ['matti', Number(props.assignableTasks.filter((task) => task.employee == 'matti').length)],
                 ['pekka', Number(props.assignableTasks.filter((task) => task.employee == 'pekka').length)],
@@ -94,7 +90,7 @@ const Simulator = (props) => {
             let min = 1000, max = -1000;
             let minEmp = '', maxEmp = '';
             for (let i=0; i<counts.length; i++) {
-                console.log('for counts:', counts[i][1])
+                console.log('for counts:', counts[i][1], counts[i][0])
                 if (counts[i][1] >= max) {
                     max = counts[i][1]
                     maxEmp = counts[i][0]
@@ -106,7 +102,18 @@ const Simulator = (props) => {
             }
             console.log('min, max & diff:', min, max, ' - ', max-min)
             console.log('minEmp, maxEmp:', minEmp, maxEmp)
-            if (max - min > 1) {
+            if (max - min == 0) {
+                employee = employeeList[(Math.floor(Math.random() * employeeList.length))]
+            }
+            else if (max - min == 1) {
+                let minList = []
+                for (let i=0; i<counts.length; i++) {
+                    if (counts[i][1] == min) minList.push(counts[i][0])
+                }
+                if (minList.length == 1) employee = minList[0]
+                else employee = Math.random() > 0.5 ? minList[0] : minList[1]
+            }
+            else if (max - min > 1) {
                 let maxEmpTask = props.assignableTasks.filter((task) => task.employee == maxEmp)
                 console.log('maxEmpTask:', maxEmp, maxEmpTask)
                 let minEmpTask = props.assignableTasks.filter((task) => task.employee == minEmp)
@@ -116,6 +123,7 @@ const Simulator = (props) => {
                 employee = minEmp
             }
         }
+        console.log('---> employee:', employee)
         let newTaskObject = {
             'flat': flatNumber,
             'device': devices[randomDevice],
@@ -131,14 +139,10 @@ const Simulator = (props) => {
             'timeTicketCreated': new Date(),
             'residentMessage': '...',
         }
-        /*setNewAssignedTask(newTaskObject)
-        props.setMattisTasks(props.mattisTasks.concat(newAssignedTask))
-        setNewAssignedTask('')*/
         setCounter(counter + 1)
         props.setAssignableTasks(props.assignableTasks.concat(newTaskObject))
         setCounter(counter + 1)
-        setCounter(counter - 1)
-        //console.log('assignableTasks: ', props.assignableTasks)
+        setCounter(counter + 1)
     }
 
     return (
@@ -160,6 +164,7 @@ const Simulator = (props) => {
             <Button size='sm' variant='warning' onClick={() => simulateAndAssignTask('yellow')}>YELLOW</Button> {' '}
             <Button size='sm' variant='secondary' onClick={() => simulateAndAssignTask('grey')}>GREY</Button> {' '}
             <hr />
+            {counter}
         </div>
     )
 }
