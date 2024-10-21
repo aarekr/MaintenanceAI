@@ -11,6 +11,10 @@ import { useState } from 'react'
 import DoItYourself from './components/DoItYourself'
 import Manager from './components/Manager'
 import Flat from './components/Flat'
+import MG1Matti from './components/MG1Matti'
+import MG2Pekka from './components/MG2Pekka'
+import MG3Timo from './components/MG3Timo'
+import MG3Manager from './components/MG3Manager'
 
 const App = () => {
   // single flat items
@@ -22,10 +26,9 @@ const App = () => {
   const residentDeviceList = ['Dishwasher', 'Door lock', 'Oven', 'Washing machine']
   const residentDeviceListStatuses = [[dishWasher, 101], [doorLock, 102], [oven, 103], [washingMachine, 104]]
   const [ repairTasks, setRepairTasks ] = useState([])
+  const [ assignableTasks, setAssignableTasks ] = useState([])
 
-  const padding = {
-    padding: 5
-  }
+  const padding = { padding: 5 }
   //console.log('run simulator: ', runSimulator)
   //console.log('APP repairTasks:', repairTasks)
 
@@ -51,6 +54,18 @@ const App = () => {
             <Nav.Link href="/manager" as="span">
               <Link style={padding} to="/manager">Manager</Link>
             </Nav.Link>
+            <Nav.Link href="/mg1-matti" as="span">
+              <Link style={padding} to="/mg1-matti">Matti</Link>
+            </Nav.Link>
+            <Nav.Link href="/mg2-pekka" as="span">
+              <Link style={padding} to="/mg2-pekka">Pekka</Link>
+            </Nav.Link>
+            <Nav.Link href="/mg3-timo" as="span">
+              <Link style={padding} to="/mg3-timo">Timo</Link>
+            </Nav.Link>
+            <Nav.Link href="/manager-mg3" as="span">
+              <Link style={padding} to="/manager-mg3">Manager-MG3</Link>
+            </Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Navbar>
@@ -61,7 +76,8 @@ const App = () => {
           doorLock={doorLock} setDoorLock={setDoorLock}
           oven={oven} setOven={setOven}
           washingMachine={washingMachine} setWashingMachine={setWashingMachine}
-          repairTasks={repairTasks} setRepairTasks={setRepairTasks} />} />
+          repairTasks={repairTasks} setRepairTasks={setRepairTasks}
+          assignableTasks={assignableTasks} setAssignableTasks={setAssignableTasks} />} />
         <Route path="/resident" element={<Resident
           dishWasher={dishWasher} setDishWasher={setDishWasher}
           doorLock={doorLock} setDoorLock={setDoorLock}
@@ -91,6 +107,10 @@ const App = () => {
           oven={oven} setOven={setOven}
           washingMachine={washingMachine} setWashingMachine={setWashingMachine}
           repairTasks={repairTasks} />} />
+        <Route path="/mg1-matti" element={<MG1Matti assignableTasks={assignableTasks} setAssignableTasks={setAssignableTasks} />} />
+        <Route path="/mg2-pekka" element={<MG2Pekka assignableTasks={assignableTasks} setAssignableTasks={setAssignableTasks} />} />
+        <Route path="/mg3-timo" element={<MG3Timo assignableTasks={assignableTasks} setAssignableTasks={setAssignableTasks} />} />
+        <Route path="/manager-mg3" element={<MG3Manager assignableTasks={assignableTasks} setAssignableTasks={setAssignableTasks} />} />
       </Routes>
     </Router>
   )

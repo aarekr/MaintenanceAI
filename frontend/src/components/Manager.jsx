@@ -28,7 +28,7 @@ const Manager = (props) => {
     if (props.repairTasks.length == 0) {
         return (
             <div>
-                <h1>MAINTENANCE - 1000 FLATS</h1>
+                <h1>MANAGER - 1000 FLATS</h1>
                 <hr />
                 <h3>Nothing to fix</h3>
             </div>
@@ -37,7 +37,7 @@ const Manager = (props) => {
 
     return (
         <div>
-            <h1>MAINTENANCE - 1000 FLATS</h1>
+            <h1>MANAGER - 1000 FLATS</h1>
             <hr />
             <h3>Work list</h3>
             <br />

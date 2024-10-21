@@ -29,7 +29,7 @@ const Maintenance1000 = (props) => {
                         <Card.Text>Status: {StatusBadge(task.status)}</Card.Text>
                         <Card.Text>Error code: {ErrorBadge(task.errorCode)} : explanation</Card.Text>
                         <Card.Text>Repair measure: {task.repairMeasure} {' '}
-                            <button>fix</button> {' '}
+                            <button>fix on spot</button> {' '}
                             <button>replace</button> {' '}
                         </Card.Text>
                         <Card.Text>Message from resident: {task.residentMessage}</Card.Text>
