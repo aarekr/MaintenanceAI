@@ -12,6 +12,7 @@ const MG1Matti = (assignableTasks) => {
     const handleRepairStatusChange = (task, newStatus) => {
         //console.log('handleRepairStatusChange:', task)
         task.status = newStatus
+        if (newStatus == 'OK') task.employee = 'not assigned'
         setTaskUpdate(taskUpdate + 1)
     }
 
@@ -42,6 +43,62 @@ const MG1Matti = (assignableTasks) => {
                 </Card> <br />
             </div>
         )
+    }
+
+    const redistributeWorkload = () => {
+        let counts = [
+            ['matti', Number(assignableTasks['assignableTasks'].filter((task) => 
+                task.employee == 'matti' && task.status != 'REPAIR COMPLETED').length)],
+            ['pekka', Number(assignableTasks['assignableTasks'].filter((task) => 
+                task.employee == 'pekka' && task.status != 'REPAIR COMPLETED').length)],
+            ['timo', Number(assignableTasks['assignableTasks'].filter((task) => 
+                task.employee == 'timo' && task.status != 'REPAIR COMPLETED').length)]
+        ]
+        console.log('Matti distributeWorkload counts: ', counts)
+        let min = 1000, max = -1000;
+        let minEmp = [], maxEmp = [];
+        for (let i=0; i<counts.length; i++) {
+            console.log('for counts:', counts[i][1], counts[i][0])
+            if (counts[i][1] > max) max = counts[i][1]
+            if (counts[i][1] <= min) min = counts[i][1]
+        }
+        for (let i=0; i<counts.length; i++) {
+            if (counts[i][1] >= max) maxEmp.push(counts[i][0])
+            if (counts[i][1] <= min) minEmp.push(counts[i][0])
+        }
+        console.log('min, max & diff:', min, max, ' - ', max-min)
+        console.log('minEmp, maxEmp:', minEmp, maxEmp)
+        if (max - min > 1) {
+            console.log('max - min > 1')
+            let chosenMaxEmp = 'NA', chosenMinEmp = 'NA'
+            let allTasks = assignableTasks['assignableTasks'].filter((task) => 
+                task.status != 'REPAIR COMPLETED' && task.status != 'OK')
+            console.log('allTasks:', allTasks)
+            if (allTasks.includes(0) && allTasks.includes(2)) {
+                console.log('allTasks 0&2:', allTasks)
+            }
+            else if (maxEmp.length > 1) {
+                chosenMaxEmp = Math.random() > 0.5 ? maxEmp[0] : maxEmp[1]
+                chosenMinEmp = Math.random() > 0.5 ? minEmp[0] : minEmp[1]
+            }
+            else if (maxEmp.length == 1) {
+                chosenMaxEmp = maxEmp[0]
+                chosenMinEmp = minEmp[0]
+            }
+            let length = assignableTasks['assignableTasks'].filter((task) => 
+                task.employee == chosenMaxEmp && task.status != 'REPAIR COMPLETED').length
+            console.log('redistributing tasks')
+            assignableTasks['assignableTasks'].filter((task) => 
+                task.employee == chosenMaxEmp && 
+                task.status != 'REPAIR COMPLETED')[length-1]
+                    .employee = chosenMinEmp
+        }
+        minEmp = []
+        maxEmp = []
+    }
+
+    for (let i=0; i<1; i++) {
+        redistributeWorkload()
     }
 
     if (assignableTasks == 0) {

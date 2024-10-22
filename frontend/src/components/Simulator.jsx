@@ -82,11 +82,14 @@ const Simulator = (props) => {
         if (errorCode == 101) {
             console.log('going through assignableTasks:', props.assignableTasks.map(task => task.employee))
             let counts = [
-                ['matti', Number(props.assignableTasks.filter((task) => task.employee == 'matti').length)],
-                ['pekka', Number(props.assignableTasks.filter((task) => task.employee == 'pekka').length)],
-                ['timo', Number(props.assignableTasks.filter((task) => task.employee == 'timo').length)]
+                ['matti', Number(props.assignableTasks.filter((task) => 
+                    task.employee == 'matti' && task.status != 'REPAIR COMPLETED').length)],
+                ['pekka', Number(props.assignableTasks.filter((task) => 
+                    task.employee == 'pekka' && task.status != 'REPAIR COMPLETED').length)],
+                ['timo', Number(props.assignableTasks.filter((task) => 
+                    task.employee == 'timo' && task.status != 'REPAIR COMPLETED').length)]
             ]
-            console.log('counts: ', counts)
+            console.log('simulateAndAssignTask counts: ', counts)
             let min = 1000, max = -1000;
             let minEmp = '', maxEmp = '';
             for (let i=0; i<counts.length; i++) {
@@ -143,6 +146,22 @@ const Simulator = (props) => {
         props.setAssignableTasks(props.assignableTasks.concat(newTaskObject))
         setCounter(counter + 1)
         setCounter(counter + 1)
+    }
+
+    const distributeWorkload = () => {
+        let counts = [
+            ['matti', Number(props.assignableTasks.filter((task) => 
+                task.employee == 'matti' && task.status != 'REPAIR COMPLETED').length)],
+            ['pekka', Number(props.assignableTasks.filter((task) => 
+                task.employee == 'pekka' && task.status != 'REPAIR COMPLETED').length)],
+            ['timo', Number(props.assignableTasks.filter((task) => 
+                task.employee == 'timo' && task.status != 'REPAIR COMPLETED').length)]
+        ]
+        console.log('Simulator distributeWorkload counts: ', counts)
+    }
+
+    for (let i=0; i<1; i++) {
+        distributeWorkload()
     }
 
     return (

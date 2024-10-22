@@ -10,6 +10,7 @@ const MG2Pekka = (assignableTasks) => {
     let filteredTasks = assignableTasks['assignableTasks'].filter((task) => task.employee == 'pekka')
     const handleRepairStatusChange = (task, newStatus) => {
         task.status = newStatus
+        if (newStatus == 'OK') task.employee = 'not assigned'
         setTaskUpdate(taskUpdate + 1)
     }
 

@@ -14,8 +14,10 @@ const MG3Manager = (props) => {
     const [ searchEmployee, setSearchEmployee ] = useState('')
 
     let filteredTasks = props.assignableTasks.filter(task => task.status != 'OK')
+
     const handleRepairStatusChange = (task, newStatus) => {
         task.status = newStatus
+        if (newStatus == 'OK') task.employee = 'not assigned'
         setTaskUpdate(taskUpdate + 1)
     }
 
@@ -28,7 +30,7 @@ const MG3Manager = (props) => {
     if (props.assignableTasks.length == 0) {
         return (
             <div>
-                <h1>MANAGER - 1000 FLATS</h1>
+                <h1>MANAGER - 1000 FLATS, 3 EMPLOYEES</h1>
                 <hr />
                 <h3>Nothing to fix</h3>
             </div>
@@ -37,13 +39,20 @@ const MG3Manager = (props) => {
 
     return (
         <div>
-            <h1>MANAGER - 1000 FLATS</h1>
+            <h1>MANAGER - 1000 FLATS, 3 EMPLOYEES</h1>
             <hr />
             <div>
-                Matti: {props.assignableTasks.filter((task) => task.employee == 'matti').length} <br />
-                Pekka: {props.assignableTasks.filter((task) => task.employee == 'pekka').length} <br />
-                Timo : {props.assignableTasks.filter((task) => task.employee == 'timo').length} <br />
+                <h4>Tasks per employee</h4>
+                <ul>
+                    <li><h6>Matti: {props.assignableTasks.filter((task) => task.employee == 'matti' && 
+                        (task.status != 'REPAIR COMPLETED' || task.status != 'OK')).length}</h6></li>
+                    <li><h6>Pekka: {props.assignableTasks.filter((task) => task.employee == 'pekka' &&
+                        (task.status != 'REPAIR COMPLETED' || task.status != 'OK')).length}</h6></li>
+                    <li><h6>Timo : {props.assignableTasks.filter((task) => task.employee == 'timo' &&
+                        (task.status != 'REPAIR COMPLETED' || task.status != 'OK')).length}</h6></li>
+                </ul>
             </div>
+            <hr />
             <h3>Work list, tasks total: {props.assignableTasks.length}</h3>
             <br />
             <Table striped>
