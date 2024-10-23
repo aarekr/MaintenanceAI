@@ -53,7 +53,11 @@ const MG3Manager = (props) => {
                 </ul>
             </div>
             <hr />
-            <h3>Work list, tasks total: {props.assignableTasks.length}</h3>
+            <h3>Work list - tasks to do: {props.assignableTasks.filter(task => 
+                    (task.status != 'OK' && task.status != 'REPAIR COMPLETED')).length},
+                tasks done: {props.assignableTasks.filter(task => 
+                    (task.status == 'OK' || task.status == 'REPAIR COMPLETED')).length}
+            </h3>
             <br />
             <Table striped>
                 <thead>
