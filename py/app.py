@@ -13,19 +13,19 @@ def simulator():
 
 @app.route("/matti")
 def matti():
-    return "Matti"
+    return render_template("matti.html")
 
 @app.route("/pekka")
 def pekka():
-    return "Pekka"
+    return render_template("pekka.html")
 
 @app.route("/timo")
 def timo():
-    return "Timo"
+    return render_template("timo.html")
 
 @app.route("/manager")
 def manager():
-    return "Manager"
+    return render_template("manager.html")
 
 @app.route("/flat/<int:id>")
 def page(id):
