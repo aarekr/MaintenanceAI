@@ -3,19 +3,33 @@
 {% block body %}
 
 <div class="container">
-    <h1>MANAGER</h1>
-    <hr>
-  <div class="row">
-    <div class="col-4">
-      <h2>LEFT</h2>
-    </div>
-    <div class="col-4">
-        <h2>MIDDLE</h2>
-      </div>
-    <div class="col-4">
-      <h2>RIGHT</h2>
-    </div>
-  </div>
+  <h1>MANAGER</h1>
+  <table class="table table-hover table-striped">
+    <thead class="thead-dark">
+      <tr>
+        <th>Flat #</th>
+        <th>Device</th>
+        <th>Error</th>
+        <th>Status</th>
+        <th>Measure</th>
+        <th>Time created</th>
+        <th>Employee</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for task in all_tasks %}
+        <tr class="table-danger">
+          <td>{{ task.flat_number }}</td>
+          <td>{{ task.device }}</td>
+          <td>{{ task.error_code }}</td>
+          <td>{{ task.repair_status }}</td>
+          <td>{{ task.repair_measure }}</td>
+          <td>{{ task.time_ticket_created }}</td>
+          <td>{{ task.employee }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 </div>
 
 {% endblock %}
