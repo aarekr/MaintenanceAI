@@ -45,7 +45,14 @@ def create_urgent_case():
 
 @app.route("/matti")
 def matti():
-    return render_template("matti.html")
+    sql = text("SELECT * FROM maitasks")
+    result = db.session.execute(sql, {})
+    all_tasks = result.fetchall()
+    mattis_tasks = []
+    for item in all_tasks:
+        if item[6] == "Matti" and item[9] == True:
+            mattis_tasks.append(item)
+    return render_template("matti.html", mattis_tasks=mattis_tasks)
 
 @app.route("/pekka")
 def pekka():
@@ -66,3 +73,19 @@ def manager():
 @app.route("/flat/<int:id>")
 def page(id):
     return "This is flat " + str(id) + " page."
+
+@app.route("/marktaskstarted/<int:id>", methods=["POST"])
+def mark_task_started(id):
+    repair_status = "Repair started"
+    sql = text("UPDATE maitasks SET repair_status=:repair_status WHERE id=:id")
+    db.session.execute(sql, {"id":id, "repair_status":repair_status})
+    db.session.commit()
+    return redirect("/matti")
+
+@app.route("/marktaskcompleted/<int:id>", methods=["POST"])
+def mark_task_completed(id):
+    visible = False
+    sql = text("UPDATE maitasks SET visible=:visible WHERE id=:id")
+    db.session.execute(sql, {"id":id, "visible":visible})
+    db.session.commit()
+    return redirect("/matti")

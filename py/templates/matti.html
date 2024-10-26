@@ -3,17 +3,80 @@
 {% block body %}
 
 <div class="container">
-    <h1>MATTI</h1>
-    <hr>
+  <h1>MATTI</h1>
+  <hr>
+  {{ mattis_tasks }}
   <div class="row">
     <div class="col-4">
-      <h2>LEFT</h2>
+      <h2>TO DO</h2>
+        {% for task in mattis_tasks %}
+          {% if task[4] == 'NA' %}
+            <div class="card text-left">
+              <div class="card-header">
+                <ul class="nav nav-pills card-header-pills">
+                  <li class="nav-item">
+                    <a class="nav-link active" href="#">Active</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Link 1</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Link 2</a>
+                  </li>
+                </ul>
+              </div>
+              <div class="card-body">
+                <h5 class="card-title">Flat {{ task[1] }}</h5>
+                <p class="card-text">Device: {{ task[2] }}</p>
+                <p class="card-text">Error code: {{ task[3] }}</p>
+                <p class="card-text">Repair status: {{ task[4] }}</p>
+                <p class="card-text">Repair measure: {{ task[5] }}</p>
+                <form action="/marktaskstarted/{{ task[0] }}" method="POST">
+                  <input type="submit" value="Start">
+                </form>
+                <p class="card-text"><small class="text-muted">Ticket created: {{ task[7] }}</small></p>
+              </div>
+            </div>
+            <br />
+          {% endif %}
+        {% endfor %}
     </div>
     <div class="col-4">
-        <h2>MIDDLE</h2>
-      </div>
+      <h2>STARTED</h2>
+        {% for task in mattis_tasks %}
+          {% if task[4] == 'Repair started' %}
+            <div class="card text-left">
+              <div class="card-header">
+                <ul class="nav nav-pills card-header-pills">
+                  <li class="nav-item">
+                    <a class="nav-link active" href="#">Active</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Link 1</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Link 2</a>
+                  </li>
+                </ul>
+              </div>
+              <div class="card-body">
+                <h5 class="card-title">Flat {{ task[1] }}</h5>
+                <p class="card-text">Device: {{ task[2] }}</p>
+                <p class="card-text">Error code: {{ task[3] }}</p>
+                <p class="card-text">Repair status: {{ task[4] }}</p>
+                <p class="card-text">Repair measure: {{ task[5] }}</p>
+                <form action="/marktaskcompleted/{{ task[0] }}" method="POST">
+                  <input type="submit" value="Complete">
+                </form>
+                <p class="card-text"><small class="text-muted">Ticket created: {{ task[7] }}</small></p>
+              </div>
+            </div>
+            <br />
+          {% endif %}
+        {% endfor %}
+    </div>
     <div class="col-4">
-      <h2>RIGHT</h2>
+      <h2>COMPLETED</h2>
     </div>
   </div>
 </div>
