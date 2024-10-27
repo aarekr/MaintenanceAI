@@ -20,6 +20,27 @@ def index():
 def simulator():
     return render_template("simulator.html")
 
+def allocate_new_task_to_employee():
+    sql = text("SELECT * FROM maitasks")
+    result = db.session.execute(sql, {})
+    all_tasks = result.fetchall()
+    dict_emp_tasks = {"Matti": 0, "Pekka": 0, "Timo": 0}
+    min = 1000
+    max = 0
+    for task in all_tasks:
+        dict_emp_tasks[task[6]] += 1
+    for key, value in dict_emp_tasks.items():
+        if value > max:
+            max = value
+        if value < min:
+            min = value
+    min_task_emps = []
+    for name, tasks in dict_emp_tasks.items():
+        if tasks == min:
+            min_task_emps.append(name)
+    chosen_emp = random.choice(min_task_emps)
+    return chosen_emp
+
 @app.route("/createurgentcase", methods=["POST"])
 def create_urgent_case():
     print("creating new urgent service case")
@@ -28,7 +49,7 @@ def create_urgent_case():
     error_code = 101
     repair_status = "NA"
     repair_measure = "NA"
-    employee = random.choice(EMPLOYEES)
+    employee = allocate_new_task_to_employee()
     time_ticket_created = "DATE HERE" # datetime.now()
     resident_message = "..."
     visible = True
@@ -84,8 +105,20 @@ def mark_task_started(id):
 
 @app.route("/marktaskcompleted/<int:id>", methods=["POST"])
 def mark_task_completed(id):
+    repair_status = "Repair completed"
+    sql = text("UPDATE maitasks SET repair_status=:repair_status WHERE id=:id")
+    db.session.execute(sql, {"id":id, "repair_status":repair_status})
+    db.session.commit()
+    return redirect("/matti")
+
+@app.route("/marktaskremoved/<int:id>", methods=["POST"])
+def mark_task_removed(id):
     visible = False
     sql = text("UPDATE maitasks SET visible=:visible WHERE id=:id")
     db.session.execute(sql, {"id":id, "visible":visible})
     db.session.commit()
     return redirect("/matti")
+
+@app.route("/repairrecommendations")
+def repair_recommendations():
+    return render_template("repair_recommendations.html")

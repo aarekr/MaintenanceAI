@@ -15,13 +15,10 @@
               <div class="card-header">
                 <ul class="nav nav-pills card-header-pills">
                   <li class="nav-item">
-                    <a class="nav-link active" href="#">Active</a>
+                    <a class="nav-link" href="repairrecommendations">Recommendations</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="#">Link 1</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="#">Link 2</a>
+                    <a class="nav-link" href="/flat/{{ task[1] }}">Flat</a>
                   </li>
                 </ul>
               </div>
@@ -49,13 +46,10 @@
               <div class="card-header">
                 <ul class="nav nav-pills card-header-pills">
                   <li class="nav-item">
-                    <a class="nav-link active" href="#">Active</a>
+                    <a class="nav-link" href="repairrecommendations">Recommendations</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="#">Link 1</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="#">Link 2</a>
+                    <a class="nav-link" href="/flat/{{ task[1] }}">Flat</a>
                   </li>
                 </ul>
               </div>
@@ -77,6 +71,34 @@
     </div>
     <div class="col-4">
       <h2>COMPLETED</h2>
+        {% for task in mattis_tasks %}
+          {% if task[4] == 'Repair completed' %}
+            <div class="card text-left">
+              <div class="card-header">
+                <ul class="nav nav-pills card-header-pills">
+                  <li class="nav-item">
+                    <a class="nav-link" href="repairrecommendations">Recommendations</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/flat/{{ task[1] }}">Flat</a>
+                  </li>
+                </ul>
+              </div>
+              <div class="card-body">
+                <h5 class="card-title">Flat {{ task[1] }}</h5>
+                <p class="card-text">Device: {{ task[2] }}</p>
+                <p class="card-text">Error code: {{ task[3] }}</p>
+                <p class="card-text">Repair status: {{ task[4] }}</p>
+                <p class="card-text">Repair measure: {{ task[5] }}</p>
+                <form action="/marktaskremoved/{{ task[0] }}" method="POST">
+                  <input type="submit" value="Remove">
+                </form>
+                <p class="card-text"><small class="text-muted">Ticket created: {{ task[7] }}</small></p>
+              </div>
+            </div>
+            <br />
+          {% endif %}
+        {% endfor %}
     </div>
   </div>
 </div>
