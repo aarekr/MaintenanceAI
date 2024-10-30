@@ -77,11 +77,25 @@ def matti():
 
 @app.route("/pekka")
 def pekka():
-    return render_template("pekka.html")
+    sql = text("SELECT * FROM maitasks")
+    result = db.session.execute(sql, {})
+    all_tasks = result.fetchall()
+    pekkas_tasks = []
+    for item in all_tasks:
+        if item[6] == 'Pekka' and item[9] == True:
+            pekkas_tasks.append(item)
+    return render_template("pekka.html", pekkas_tasks=pekkas_tasks)
 
 @app.route("/timo")
 def timo():
-    return render_template("timo.html")
+    sql = text("SELECT * FROM maitasks")
+    result = db.session.execute(sql, {})
+    all_tasks = result.fetchall()
+    timos_tasks = []
+    for item in all_tasks:
+        if item[6] == 'Timo' and item[9] == True:
+            timos_tasks.append(item)
+    return render_template("timo.html", timos_tasks=timos_tasks)
 
 @app.route("/manager")
 def manager():
@@ -101,6 +115,8 @@ def mark_task_started(id):
     sql = text("UPDATE maitasks SET repair_status=:repair_status WHERE id=:id")
     db.session.execute(sql, {"id":id, "repair_status":repair_status})
     db.session.commit()
+    #name = request.form["name"]
+    #print("name:", name)
     return redirect("/matti")
 
 @app.route("/marktaskcompleted/<int:id>", methods=["POST"])
