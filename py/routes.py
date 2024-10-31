@@ -5,7 +5,7 @@ from app import app
 from db import db
 
 import random
-from datetime import datetime
+from datetime import datetime, timedelta
 
 DEVICES = ["Dishwasher", "Microwave", "Oven", "Stove", "Washing machine"]
 ERROR_CODES = [101, 102, 103, 104, 105]
@@ -14,7 +14,6 @@ EMPLOYEES = ["Matti", "Pekka", "Timo"]
 @app.route("/")
 def index():
     return redirect("/simulator")
-    #return render_template("index.html") 
 
 @app.route("/simulator")
 def simulator():
@@ -50,17 +49,18 @@ def create_urgent_case():
     repair_status = "NA"
     repair_measure = "NA"
     employee = allocate_new_task_to_employee()
-    time_ticket_created = "DATE HERE" # datetime.now()
+    time_ticket_created = datetime.now()
+    time_eta = time_ticket_created + timedelta(days=2)
     resident_message = "..."
     visible = True
     sql = text("INSERT INTO maitasks (flat_number, device, error_code, repair_status, \
-               repair_measure, employee, time_ticket_created, resident_message, visible) VALUES \
+               repair_measure, employee, time_ticket_created, time_eta, resident_message, visible) VALUES \
                (:flat_number, :device, :error_code, :repair_status, :repair_measure, :employee, \
-               :time_ticket_created, :resident_message, :visible)")
+               :time_ticket_created, :time_eta, :resident_message, :visible)")
     db.session.execute(sql, {"flat_number":flat_number, "device":device, "error_code":error_code, \
                              "repair_status":repair_status, "repair_measure":repair_measure, \
                                 "employee":employee, "time_ticket_created":time_ticket_created, \
-                                "resident_message":resident_message, "visible":visible})
+                                "time_eta":time_eta, "resident_message":resident_message, "visible":visible})
     db.session.commit()
     return redirect("/simulator")
 
@@ -71,7 +71,7 @@ def matti():
     all_tasks = result.fetchall()
     mattis_tasks = []
     for item in all_tasks:
-        if item[6] == "Matti" and item[9] == True:
+        if item[6] == "Matti" and item[10] == True:
             mattis_tasks.append(item)
     return render_template("matti.html", mattis_tasks=mattis_tasks)
 
@@ -82,7 +82,7 @@ def pekka():
     all_tasks = result.fetchall()
     pekkas_tasks = []
     for item in all_tasks:
-        if item[6] == 'Pekka' and item[9] == True:
+        if item[6] == 'Pekka' and item[10] == True:
             pekkas_tasks.append(item)
     return render_template("pekka.html", pekkas_tasks=pekkas_tasks)
 
@@ -93,7 +93,7 @@ def timo():
     all_tasks = result.fetchall()
     timos_tasks = []
     for item in all_tasks:
-        if item[6] == 'Timo' and item[9] == True:
+        if item[6] == 'Timo' and item[10] == True:
             timos_tasks.append(item)
     return render_template("timo.html", timos_tasks=timos_tasks)
 
@@ -105,9 +105,14 @@ def manager():
     print("manager all_tasks:", all_tasks)
     return render_template("manager.html", all_tasks=all_tasks)
 
-@app.route("/flat/<int:id>")
+@app.route("/flat/<int:id>", methods=["GET"])
 def page(id):
-    return "This is flat " + str(id) + " page."
+    print("flat page id:", id)
+    sql = text("SELECT * FROM maitasks WHERE flat_number=" + str(id))
+    result = db.session.execute(sql, {"flat_number":id})
+    flat_info = result.fetchone()
+    print("flat_info:", flat_info)
+    return render_template("flat.html", flat_info=flat_info)
 
 @app.route("/marktaskstarted/<int:id>", methods=["POST"])
 def mark_task_started(id):

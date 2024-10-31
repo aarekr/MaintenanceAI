@@ -7,6 +7,7 @@ CREATE TABLE maitasks (
     repair_measure TEXT,
     employee TEXT,
     time_ticket_created TEXT,
+    time_eta TEXT,
     resident_message TEXT,
     visible BOOLEAN
 )

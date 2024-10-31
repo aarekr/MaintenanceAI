@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<h1>FLAT {{ flat_info[1] }}</h1>
+{{ flat_info }}
+<table>
+    <thead>
+        <tr>
+            <th>Device</th>
+            <th>Repair status</th>
+            <th>Repair measure</th>
+            <th>ETA</th>
+            <th>Employee</th>
+            <th>Repair time</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{ flat_info[2] }}</td>
+            <td align="center">{{ flat_info[4] }}</td>
+            <td align="center">{{ flat_info[5] }}</td>
+            <td>ETA here</td>
+            <td align="center">{{ flat_info[6] }}</td>
+            <td>options here</td>
+        </tr>
+    </tbody>
+</table>
+
+{% endblock %}
