@@ -14,6 +14,7 @@
         <th>Measure</th>
         <th>Time created</th>
         <th>Employee</th>
+        <th>Action</th>
       </tr>
     </thead>
     <tbody>
@@ -26,6 +27,9 @@
           <td>{{ task.repair_measure }}</td>
           <td>{{ task.time_ticket_created }}</td>
           <td>{{ task.employee }}</td>
+          <td><form action="/marktaskremoved/{{ task[0] }}/{{ 4 }}" method="POST">
+                <input type="submit" value="Remove">
+              </form></td>
         </tr>
       {% endfor %}
     </tbody>

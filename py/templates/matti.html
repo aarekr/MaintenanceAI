@@ -28,7 +28,7 @@
                 <p class="card-text">Error code: {{ task[3] }}</p>
                 <p class="card-text">Repair status: {{ task[4] }}</p>
                 <p class="card-text">Repair measure: {{ task[5] }}</p>
-                <form action="/marktaskstarted/{{ task[0] }}" method="POST">
+                <form action="/marktaskstarted/{{ task[0] }}/{{ 1 }}" method="POST">
                   <input type="submit" value="Start">
                 </form>
                 <p class="card-text"><small class="text-muted">Ticket created: {{ task[7] }}</small></p>
@@ -59,7 +59,7 @@
                 <p class="card-text">Error code: {{ task[3] }}</p>
                 <p class="card-text">Repair status: {{ task[4] }}</p>
                 <p class="card-text">Repair measure: {{ task[5] }}</p>
-                <form action="/marktaskcompleted/{{ task[0] }}" method="POST">
+                <form action="/marktaskcompleted/{{ task[0] }}/{{ 1 }}" method="POST">
                   <input type="submit" value="Complete">
                 </form>
                 <p class="card-text"><small class="text-muted">Ticket created: {{ task[7] }}</small></p>
@@ -90,7 +90,7 @@
                 <p class="card-text">Error code: {{ task[3] }}</p>
                 <p class="card-text">Repair status: {{ task[4] }}</p>
                 <p class="card-text">Repair measure: {{ task[5] }}</p>
-                <form action="/marktaskremoved/{{ task[0] }}" method="POST">
+                <form action="/marktaskremoved/{{ task[0] }}/{{ 1 }}" method="POST">
                   <input type="submit" value="Remove">
                 </form>
                 <p class="card-text"><small class="text-muted">Ticket created: {{ task[7] }}</small></p>

@@ -6,6 +6,7 @@ from db import db
 
 import random
 from datetime import datetime, timedelta
+import time
 
 DEVICES = ["Dishwasher", "Microwave", "Oven", "Stove", "Washing machine"]
 ERROR_CODES = [101, 102, 103, 104, 105]
@@ -18,6 +19,25 @@ def index():
 @app.route("/simulator")
 def simulator():
     return render_template("simulator.html")
+
+def render_manager_page(all_tasks):
+    return render_template("manager.html", all_tasks=all_tasks)
+
+@app.route("/startautomaticsimulator", methods=["POST"])
+def start_automatic_simulator():
+    i = 0
+    while i < 3:
+        print(i)
+        i = i + 1
+        create_urgent_case()
+        time.sleep(2)
+        sql = text("SELECT * FROM maitasks")
+        result = db.session.execute(sql, {})
+        all_tasks = result.fetchall()
+        print("manager all_tasks:", all_tasks)
+        render_manager_page(all_tasks)
+        time.sleep(2)
+    return render_template("manager.html", all_tasks=all_tasks)
 
 def allocate_new_task_to_employee():
     sql = text("SELECT * FROM maitasks")
@@ -105,6 +125,15 @@ def manager():
     print("manager all_tasks:", all_tasks)
     return render_template("manager.html", all_tasks=all_tasks)
 
+@app.route("/dashboard")
+def dash_board():
+    i = 0
+    while i < 10:
+        sql = text("SELECT * FROM maitasks")
+        result = db.session.execute(sql, {})
+        all_tasks = result.fetchall()
+        return render_template("dashboard.html", all_tasks=all_tasks)
+
 @app.route("/flat/<int:id>", methods=["GET"])
 def page(id):
     print("flat page id:", id)
@@ -114,31 +143,41 @@ def page(id):
     print("flat_info:", flat_info)
     return render_template("flat.html", flat_info=flat_info)
 
-@app.route("/marktaskstarted/<int:id>", methods=["POST"])
-def mark_task_started(id):
+@app.route("/marktaskstarted/<int:id>/<int:emp>", methods=["POST"])
+def mark_task_started(id, emp):
+    print("emp:", emp)
     repair_status = "Repair started"
     sql = text("UPDATE maitasks SET repair_status=:repair_status WHERE id=:id")
     db.session.execute(sql, {"id":id, "repair_status":repair_status})
     db.session.commit()
     #name = request.form["name"]
     #print("name:", name)
-    return redirect("/matti")
+    if emp == 1: return redirect("/matti")
+    if emp == 2: return redirect("/pekka")
+    if emp == 3: return redirect("/timo")
+    return redirect("/manager")
 
-@app.route("/marktaskcompleted/<int:id>", methods=["POST"])
-def mark_task_completed(id):
+@app.route("/marktaskcompleted/<int:id>/<int:emp>", methods=["POST"])
+def mark_task_completed(id, emp):
     repair_status = "Repair completed"
     sql = text("UPDATE maitasks SET repair_status=:repair_status WHERE id=:id")
     db.session.execute(sql, {"id":id, "repair_status":repair_status})
     db.session.commit()
-    return redirect("/matti")
+    if emp == 1: return redirect("/matti")
+    if emp == 2: return redirect("/pekka")
+    if emp == 3: return redirect("/timo")
+    return redirect("/manager")
 
-@app.route("/marktaskremoved/<int:id>", methods=["POST"])
-def mark_task_removed(id):
+@app.route("/marktaskremoved/<int:id>/<int:emp>", methods=["POST"])
+def mark_task_removed(id,emp):
     visible = False
     sql = text("UPDATE maitasks SET visible=:visible WHERE id=:id")
     db.session.execute(sql, {"id":id, "visible":visible})
     db.session.commit()
-    return redirect("/matti")
+    if emp == 1: return redirect("/matti")
+    if emp == 2: return redirect("/pekka")
+    if emp == 3: return redirect("/timo")
+    return redirect("/manager")
 
 @app.route("/repairrecommendations")
 def repair_recommendations():
