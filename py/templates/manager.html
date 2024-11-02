@@ -9,28 +9,66 @@
       <tr>
         <th>Flat #</th>
         <th>Device</th>
+        <th>Model</th>
         <th>Error</th>
         <th>Status</th>
         <th>Measure</th>
         <th>Time created</th>
-        <th>Employee</th>
+        <th>Employee / Company</th>
         <th>Action</th>
       </tr>
     </thead>
     <tbody>
       {% for task in all_tasks %}
-        <tr class="table-danger">
-          <td>{{ task.flat_number }}</td>
-          <td>{{ task.device }}</td>
-          <td>{{ task.error_code }}</td>
-          <td>{{ task.repair_status }}</td>
-          <td>{{ task.repair_measure }}</td>
-          <td>{{ task.time_ticket_created }}</td>
-          <td>{{ task.employee }}</td>
-          <td><form action="/marktaskremoved/{{ task[0] }}/{{ 4 }}" method="POST">
-                <input type="submit" value="Remove">
-              </form></td>
-        </tr>
+        {% if task[10] == True and task[3] == 101 %}
+          <tr class="table-danger">
+            <td>{{ task.flat_number }}</td>
+            <td>{{ task.device }}</td>
+            <td>{{ task.device_model }}</td>
+            <td>{{ task.error_code }}</td>
+            <td>{{ task.repair_status }}</td>
+            <td>{{ task.repair_measure }}</td>
+            <td>{{ task.time_ticket_created }}</td>
+            <td>{{ task.employee }}</td>
+            <td><form action="/marktaskremoved/{{ task[0] }}/{{ 4 }}" method="POST">
+                  <input type="submit" value="Remove">
+                </form></td>
+          </tr>
+        {% endif %}
+      {% endfor %}
+      {% for task in all_tasks %}
+        {% if task[10] == True and (task[3] == 102 or task[3] == 103) %}
+          <tr class="table-warning">
+            <td>{{ task.flat_number }}</td>
+            <td>{{ task.device }}</td>
+            <td>{{ task.device_model }}</td>
+            <td>{{ task.error_code }}</td>
+            <td>{{ task.repair_status }}</td>
+            <td>{{ task.repair_measure }}</td>
+            <td>{{ task.time_ticket_created }}</td>
+            <td>{{ task.employee }}</td>
+            <td><form action="/marktaskremoved/{{ task[0] }}/{{ 4 }}" method="POST">
+                  <input type="submit" value="Remove">
+                </form></td>
+          </tr>
+        {% endif %}
+      {% endfor %}
+      {% for task in all_tasks %}
+        {% if task[10] == True and (task[3] == 104 or task[3] == 105) %}
+          <tr class="table-secondary">
+            <td>{{ task.flat_number }}</td>
+            <td>{{ task.device }}</td>
+            <td>{{ task.device_model }}</td>
+            <td>{{ task.error_code }}</td>
+            <td>{{ task.repair_status }}</td>
+            <td>{{ task.repair_measure }}</td>
+            <td>{{ task.time_ticket_created }}</td>
+            <td>{{ task.employee }}</td>
+            <td><form action="/marktaskremoved/{{ task[0] }}/{{ 4 }}" method="POST">
+                  <input type="submit" value="Remove">
+                </form></td>
+          </tr>
+        {% endif %}
       {% endfor %}
     </tbody>
   </table>

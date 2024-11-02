@@ -9,8 +9,19 @@ from datetime import datetime, timedelta
 import time
 
 DEVICES = ["Dishwasher", "Microwave", "Oven", "Stove", "Washing machine"]
+DEVICE_MODELS = ["Bosch astianpesukone SMU2HVW71S",
+                 "Kenwood mikroaaltouuni K30CSS21E",
+                 "Electrolux uuni BOC001EW",
+                 "Hisense liesi HCC8615WG",
+                 "AEG pyykinpesukone LR734EX4E"]
 ERROR_CODES = [101, 102, 103, 104, 105]
 EMPLOYEES = ["Matti", "Pekka", "Timo"]
+COMPANIES = [["Antin aparaatit Ay", "Bosch,Kenwood"],
+             ["Kallen koneet Ky", "Electrolux,Hisense"],
+             ["Lassen liesipalvelu LLC", "Hisense"],
+             ["Mickes maskiner AB", "Bosch,AEG"],
+             ["Petrin pesukoneet Oy", "Bosch,AEG"],
+             ["Uunon uunit Oy", "Electrolux,Kenwood"]]
 
 @app.route("/")
 def index():
@@ -47,7 +58,11 @@ def allocate_new_task_to_employee():
     min = 1000
     max = 0
     for task in all_tasks:
-        dict_emp_tasks[task[6]] += 1
+        if "Antin" in task[6] or "Kallen" in task[6] or "Lassen" in task[6] or \
+            "Mickes" in task[6] or "Petrin" in task[6] or "Uunon" in task[6] or "None" in task[6]:
+            pass
+        else:
+            dict_emp_tasks[task[6]] += 1
     for key, value in dict_emp_tasks.items():
         if value > max:
             max = value
@@ -60,24 +75,90 @@ def allocate_new_task_to_employee():
     chosen_emp = random.choice(min_task_emps)
     return chosen_emp
 
+def allocate_new_task_to_service_company(device_model):
+    brand = device_model.split(" ")[0]
+    offers = {}
+    for item in COMPANIES:
+        if brand in item[1]:
+            offers[item[0]] = 100 + random.randint(0, 100)
+    sorted_offers = sorted(offers.items(), key=lambda x:x[1])
+    for item in sorted_offers:
+        print("service offer:", item[0], item[1])
+    company_and_price = str(sorted_offers[0][0]) + " " + str(sorted_offers[0][1]) + " euro"
+    return company_and_price
+
 @app.route("/createurgentcase", methods=["POST"])
 def create_urgent_case():
-    print("creating new urgent service case")
     flat_number = random.randint(1, 1000)
-    device = random.choice(DEVICES)
+    random_index = random.choice([0, 1, 2, 3, 4])
+    device = DEVICES[random_index]
+    device_model = DEVICE_MODELS[random_index]
     error_code = 101
     repair_status = "NA"
     repair_measure = "NA"
-    employee = allocate_new_task_to_employee()
+    employee = allocate_new_task_to_service_company(device_model)
     time_ticket_created = datetime.now()
     time_eta = time_ticket_created + timedelta(days=2)
     resident_message = "..."
     visible = True
-    sql = text("INSERT INTO maitasks (flat_number, device, error_code, repair_status, \
+    sql = text("INSERT INTO maitasks (flat_number, device, device_model, error_code, repair_status, \
                repair_measure, employee, time_ticket_created, time_eta, resident_message, visible) VALUES \
-               (:flat_number, :device, :error_code, :repair_status, :repair_measure, :employee, \
-               :time_ticket_created, :time_eta, :resident_message, :visible)")
-    db.session.execute(sql, {"flat_number":flat_number, "device":device, "error_code":error_code, \
+               (:flat_number, :device, :device_model, :error_code, :repair_status, :repair_measure, \
+               :employee, :time_ticket_created, :time_eta, :resident_message, :visible)")
+    db.session.execute(sql, {"flat_number":flat_number, "device":device, \
+                             "device_model":device_model, "error_code":error_code, \
+                             "repair_status":repair_status, "repair_measure":repair_measure, \
+                                "employee":employee, "time_ticket_created":time_ticket_created, \
+                                "time_eta":time_eta, "resident_message":resident_message, "visible":visible})
+    db.session.commit()
+    return redirect("/simulator")
+
+@app.route("/createmaintenancecase", methods=["POST"])
+def create_maintenance_case():
+    flat_number = random.randint(1, 1000)
+    random_index = random.choice([0, 1, 2, 3, 4])
+    device = DEVICES[random_index]
+    device_model = DEVICE_MODELS[random_index]
+    error_code = random.choice([102, 103])
+    repair_status = "NA"
+    repair_measure = "NA"
+    employee = allocate_new_task_to_employee()
+    time_ticket_created = datetime.now()
+    time_eta = time_ticket_created + timedelta(days=10)
+    resident_message = "..."
+    visible = True
+    sql = text("INSERT INTO maitasks (flat_number, device, device_model, error_code, repair_status, \
+               repair_measure, employee, time_ticket_created, time_eta, resident_message, visible) VALUES \
+               (:flat_number, :device, :device_model, :error_code, :repair_status, :repair_measure, \
+               :employee, :time_ticket_created, :time_eta, :resident_message, :visible)")
+    db.session.execute(sql, {"flat_number":flat_number, "device":device, \
+                             "device_model":device_model, "error_code":error_code, \
+                             "repair_status":repair_status, "repair_measure":repair_measure, \
+                                "employee":employee, "time_ticket_created":time_ticket_created, \
+                                "time_eta":time_eta, "resident_message":resident_message, "visible":visible})
+    db.session.commit()
+    return redirect("/simulator")
+
+@app.route("/createcheckupcase", methods=["POST"])
+def create_checkup_case():
+    flat_number = random.randint(1, 1000)
+    random_index = random.choice([0, 1, 2, 3, 4])
+    device = DEVICES[random_index]
+    device_model = DEVICE_MODELS[random_index]
+    error_code = random.choice([104, 105])
+    repair_status = "NA"
+    repair_measure = "NA"
+    employee = allocate_new_task_to_employee()
+    time_ticket_created = datetime.now()
+    time_eta = time_ticket_created + timedelta(days=30)
+    resident_message = "..."
+    visible = True
+    sql = text("INSERT INTO maitasks (flat_number, device, device_model, error_code, repair_status, \
+               repair_measure, employee, time_ticket_created, time_eta, resident_message, visible) VALUES \
+               (:flat_number, :device, :device_model, :error_code, :repair_status, :repair_measure, \
+               :employee, :time_ticket_created, :time_eta, :resident_message, :visible)")
+    db.session.execute(sql, {"flat_number":flat_number, "device":device, \
+                             "device_model":device_model, "error_code":error_code, \
                              "repair_status":repair_status, "repair_measure":repair_measure, \
                                 "employee":employee, "time_ticket_created":time_ticket_created, \
                                 "time_eta":time_eta, "resident_message":resident_message, "visible":visible})
@@ -122,7 +203,6 @@ def manager():
     sql = text("SELECT * FROM maitasks")
     result = db.session.execute(sql, {})
     all_tasks = result.fetchall()
-    print("manager all_tasks:", all_tasks)
     return render_template("manager.html", all_tasks=all_tasks)
 
 @app.route("/dashboard")

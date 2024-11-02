@@ -5,16 +5,19 @@
 <title>Simulator</title>
 <h1>Simulators</h1>
 
-<h3>1000 flats, 3 employees</h3>
-<button>RED</button>
-<button>YELLOW</button>
-<button>GREY</button>
+<h3>1000 flats, 3 employees, 6 services companies</h3>
 
 <form action="/createurgentcase" method="POST">
     <input type="submit" value="URGENT">
 </form>
+<form action="/createmaintenancecase" method="POST">
+    <input type="submit" value="MAINTENANCE">
+</form>
+<form action="/createcheckupcase" method="POST">
+    <input type="submit" value="CHECK UP">
+</form>
 <br>
-
+<hr>
 <form action="/startautomaticsimulator" method="POST">
     <input type="submit" value="AUTOMATIC SIMULATOR">
 </form>
