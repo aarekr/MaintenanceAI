@@ -22,6 +22,7 @@ COMPANIES = [["Antin aparaatit Ay", "Bosch,Kenwood"],
              ["Mickes maskiner AB", "Bosch,AEG"],
              ["Petrin pesukoneet Oy", "Bosch,AEG"],
              ["Uunon uunit Oy", "Electrolux,Kenwood"]]
+all_offers_given = []
 
 @app.route("/")
 def index():
@@ -81,11 +82,17 @@ def allocate_new_task_to_service_company(device_model):
     for item in COMPANIES:
         if brand in item[1]:
             offers[item[0]] = 100 + random.randint(0, 100)
+            #all_offers_given.append([item[0], offers[item[0]]])
     sorted_offers = sorted(offers.items(), key=lambda x:x[1])
+    all_offers_given.append(offers)
     for item in sorted_offers:
         print("service offer:", item[0], item[1])
     company_and_price = str(sorted_offers[0][0]) + " " + str(sorted_offers[0][1]) + " euro"
     return company_and_price
+
+@app.route("/offers")
+def show_offers():
+    return render_template("offers.html", all_offers_given=all_offers_given)
 
 @app.route("/createurgentcase", methods=["POST"])
 def create_urgent_case():

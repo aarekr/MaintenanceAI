@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<h1>OFFERS</h1>
+
+{% for offer_round in all_offers_given %}
+    {% for key, value in offer_round.items() %}
+        {{ key }} : {{ value }} euro <br>
+    {% endfor %}
+    <hr>
+{% endfor %}
+
+{% endblock %}
