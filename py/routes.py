@@ -181,7 +181,7 @@ def matti():
     for item in all_tasks:
         if item[6] == "Matti" and item[10] == True:
             mattis_tasks.append(item)
-    return render_template("matti.html", mattis_tasks=mattis_tasks)
+    return render_template("matti.html", mattis_tasks=mattis_tasks, suggested_visit_times=suggested_visit_times)
 
 @app.route("/pekka")
 def pekka():
@@ -228,17 +228,39 @@ def page(id):
     result = db.session.execute(sql, {"flat_number":id})
     flat_info = result.fetchone()
     print("flat_info:", flat_info)
-    return render_template("flat.html", flat_info=flat_info)
+    return render_template("flat.html", flat_info=flat_info, suggested_visit_times=suggested_visit_times)
+
+def getWeekday(date):
+    days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+    return str(days[date.weekday()])
+
+date_1 = datetime.now() + timedelta(days=1)
+date_1 = str(date_1.hour)+":00 "+getWeekday(date_1)+" "+str(date_1.day)+"."+str(date_1.month)+"."
+date_2 = datetime.now() + timedelta(days=1, hours=2)
+date_2 = str(date_2.hour)+":00 "+getWeekday(date_2)+" "+str(date_2.day)+"."+str(date_2.month)+"."
+date_3 = datetime.now() + timedelta(days=1, hours=5)
+date_3 = str(date_3.hour)+":00 "+getWeekday(date_3)+" "+str(date_3.day)+"."+str(date_3.month)+"."
+suggested_visit_times = {}
+suggested_visit_times[(725, "Matti")] = [0, ["Not chosen", date_1, date_2, date_3]]
+@app.route("/markvisit/<int:id>/<int:emp>", methods=["POST"])
+def mark_visit(id, emp):
+    repair_measure = "Visit"
+    sql = text("UPDATE maitasks SET repair_measure=:repair_measure WHERE id=:id")
+    db.session.execute(sql, {"id":id, "repair_measure":repair_measure})
+    db.session.commit()
+    #suggested_times_matti.append(datetime.now() + timedelta(days=1))
+    #suggested_times_matti.append(datetime.now() + timedelta(days=1, hours=2))
+    if emp == 1: return redirect("/matti")
+    if emp == 2: return redirect("/pekka")
+    if emp == 3: return redirect("/timo")
+    return redirect("/manager")
 
 @app.route("/marktaskstarted/<int:id>/<int:emp>", methods=["POST"])
 def mark_task_started(id, emp):
-    print("emp:", emp)
     repair_status = "Repair started"
     sql = text("UPDATE maitasks SET repair_status=:repair_status WHERE id=:id")
     db.session.execute(sql, {"id":id, "repair_status":repair_status})
     db.session.commit()
-    #name = request.form["name"]
-    #print("name:", name)
     if emp == 1: return redirect("/matti")
     if emp == 2: return redirect("/pekka")
     if emp == 3: return redirect("/timo")

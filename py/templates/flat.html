@@ -7,12 +7,12 @@
 <table>
     <thead>
         <tr>
-            <th>Device</th>
-            <th>Repair status</th>
-            <th>Repair measure</th>
-            <th>ETA</th>
-            <th>Employee</th>
-            <th>Repair time</th>
+            <th width="100">Device</th>
+            <th width="140">Repair status</th>
+            <th width="140">Repair measure</th>
+            <th width="100">ETA</th>
+            <th width="100">Employee</th>
+            <th width="200">Repair time</th>
         </tr>
     </thead>
     <tbody>
@@ -22,7 +22,21 @@
             <td align="center">{{ flat_info[5] }}</td>
             <td>ETA here</td>
             <td align="center">{{ flat_info[6] }}</td>
-            <td>options here</td>
+            <td>{% if (flat_info[1], flat_info[6]) in suggested_visit_times %}
+                    <form>
+                        <label>1: {{ suggested_visit_times[(flat_info[1], flat_info[6])][1][1] }}</label>
+                        <input type="submit" value="Accept"></input>
+                    </form>
+                    <form>
+                        <label>2: {{ suggested_visit_times[(flat_info[1], flat_info[6])][1][2] }}</label>
+                        <input type="submit" value="Accept"></input>
+                    </form>
+                    <form>
+                        <label>3: {{ suggested_visit_times[(flat_info[1], flat_info[6])][1][3] }}</label>
+                        <input type="submit" value="Accept"></input>
+                    </form>
+                {% endif %}
+            </td>
         </tr>
     </tbody>
 </table>
