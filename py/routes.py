@@ -230,30 +230,57 @@ def page(id):
     print("flat_info:", flat_info)
     return render_template("flat.html", flat_info=flat_info, suggested_visit_times=suggested_visit_times)
 
+def getEmployeeNameWithId(id):
+    if id == 1: return "Matti"
+    elif id == 2: return "Pekka"
+    elif id == 3: return "Timo"
+    return "No name"
+
 def getWeekday(date):
     days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
     return str(days[date.weekday()])
 
-date_1 = datetime.now() + timedelta(days=1)
-date_1 = str(date_1.hour)+":00 "+getWeekday(date_1)+" "+str(date_1.day)+"."+str(date_1.month)+"."
-date_2 = datetime.now() + timedelta(days=1, hours=2)
-date_2 = str(date_2.hour)+":00 "+getWeekday(date_2)+" "+str(date_2.day)+"."+str(date_2.month)+"."
-date_3 = datetime.now() + timedelta(days=1, hours=5)
-date_3 = str(date_3.hour)+":00 "+getWeekday(date_3)+" "+str(date_3.day)+"."+str(date_3.month)+"."
+def getSuggestedServiceDates():
+    date_1 = datetime.now() + timedelta(days=1)
+    date_1 = str(date_1.hour)+":00 "+getWeekday(date_1)+" "+str(date_1.day)+"."+str(date_1.month)+"."
+    date_2 = datetime.now() + timedelta(days=1, hours=2)
+    date_2 = str(date_2.hour)+":00 "+getWeekday(date_2)+" "+str(date_2.day)+"."+str(date_2.month)+"."
+    date_3 = datetime.now() + timedelta(days=1, hours=5)
+    date_3 = str(date_3.hour)+":00 "+getWeekday(date_3)+" "+str(date_3.day)+"."+str(date_3.month)+"."
+    #suggested_visit_times[(725, "Matti")] = [0, ["Not chosen", date_1, date_2, date_3]]  # remove this
+    three_dates_list.append("Not chosen")
+    three_dates_list.append(date_1)
+    three_dates_list.append(date_2)
+    three_dates_list.append(date_3)
+    return three_dates_list
 suggested_visit_times = {}
-suggested_visit_times[(725, "Matti")] = [0, ["Not chosen", date_1, date_2, date_3]]
-@app.route("/markvisit/<int:id>/<int:emp>", methods=["POST"])
-def mark_visit(id, emp):
+three_dates_list = []
+
+@app.route("/markvisit/<int:id>/<int:flat>/<int:emp>", methods=["POST"])
+def mark_visit(id, flat, emp):
     repair_measure = "Visit"
     sql = text("UPDATE maitasks SET repair_measure=:repair_measure WHERE id=:id")
     db.session.execute(sql, {"id":id, "repair_measure":repair_measure})
     db.session.commit()
-    #suggested_times_matti.append(datetime.now() + timedelta(days=1))
-    #suggested_times_matti.append(datetime.now() + timedelta(days=1, hours=2))
+    threeDatesList = getSuggestedServiceDates()
+    print("threeDatesList:", threeDatesList)
+    suggested_visit_times[(flat, getEmployeeNameWithId(emp))] = [0, threeDatesList]
     if emp == 1: return redirect("/matti")
     if emp == 2: return redirect("/pekka")
     if emp == 3: return redirect("/timo")
     return redirect("/manager")
+
+@app.route("/flat/chooseservicetime/<int:id>/<int:flat>/<int:time>")
+def save_visit_time(id, flat, time):
+    time_visit = three_dates_list[time]
+    print("flat:", flat, "time_visit:", time_visit)
+    sql = text("UPDATE maitasks SET time_visit=:time_visit WHERE id=:id")
+    db.session.execute(sql, {"id":id, "time_visit":time_visit})
+    db.session.commit()
+    suggested_visit_times.clear()
+    three_dates_list.clear()
+    address = "/flat/" + str(flat)
+    return redirect(address)
 
 @app.route("/marktaskstarted/<int:id>/<int:emp>", methods=["POST"])
 def mark_task_started(id, emp):

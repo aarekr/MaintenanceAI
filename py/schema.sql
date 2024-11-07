@@ -10,5 +10,6 @@ CREATE TABLE maitasks (
     time_eta TEXT,
     resident_message TEXT,
     visible BOOLEAN,
-    device_model TEXT
+    device_model TEXT,
+    time_visit TEXT
 )
