@@ -211,7 +211,27 @@ def manager():
     sql = text("SELECT * FROM maitasks")
     result = db.session.execute(sql, {})
     all_tasks = result.fetchall()
-    return render_template("manager.html", all_tasks=all_tasks)
+    # table structure: [maintenance, check, total_to-do, not_started, started, completed]
+    tasks_per_employee = {"Matti": [0,0,0,0,0,0], "Pekka": [0,0,0,0,0,0], "Timo": [0,0,0,0,0,0]}
+    for item in all_tasks:
+        print("item:", item)
+        if item[4] == "Repair completed":
+            tasks_per_employee[item[6]][5] += 1
+            continue
+        elif item[4] == "NA":
+            tasks_per_employee[item[6]][3] += 1
+        elif item[4] == "Repair started":
+            tasks_per_employee[item[6]][4] += 1
+        if item[3] == 102 or item[3] == 103:     # maintenance cases
+            tasks_per_employee[item[6]][0] += 1
+            tasks_per_employee[item[6]][2] += 1
+        elif item[3] == 104 or item[3] == 105:   # check up cases
+            tasks_per_employee[item[6]][1] += 1
+            tasks_per_employee[item[6]][2] += 1
+    print("valmis tasks_per_employee:")
+    for key, value in tasks_per_employee.items():
+        print(key, value)
+    return render_template("manager.html", all_tasks=all_tasks, tasks_per_employee=tasks_per_employee)
 
 @app.route("/dashboard")
 def dash_board():

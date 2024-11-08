@@ -3,7 +3,8 @@
 {% block body %}
 
 <div class="container">
-  <h1>MANAGER</h1>
+  <h1>MANAGER</h1> <br>
+  <h3>Tasks overview</h3>
   <table class="table table-hover table-striped">
     <thead class="thead-dark">
       <tr>
@@ -72,6 +73,33 @@
       {% endfor %}
     </tbody>
   </table>
+  
+  <br><h3>Tasks per employee</h3>
+  <table class="table table-hover table-striped">
+    <thead class="thead-dark">
+      <tr>
+        <th>Employee</th>
+        <th>Maintenance</th>
+        <th>Check</th>
+        <th>Total to-do</th>
+        <th>Not started</th>
+        <th>Started</th>
+        <th>Completed</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for key, value in tasks_per_employee.items() %}
+        <tr>
+          <td>{{ key }}</td>
+          <td>{{ value[0] }}</td>
+          <td>{{ value[1] }}</td>
+          <td>{{ value[2] }}</td>
+          <td>{{ value[3] }}</td>
+          <td>{{ value[4] }}</td>
+          <td>{{ value[5] }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
 </div>
 
 {% endblock %}
