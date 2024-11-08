@@ -181,7 +181,8 @@ def matti():
     for item in all_tasks:
         if item[6] == "Matti" and item[10] == True:
             mattis_tasks.append(item)
-    return render_template("matti.html", mattis_tasks=mattis_tasks, suggested_visit_times=suggested_visit_times)
+    return render_template("matti.html", mattis_tasks=mattis_tasks, three_dates_list=three_dates_list,
+                           suggested_visit_times=suggested_visit_times)
 
 @app.route("/pekka")
 def pekka():
@@ -293,6 +294,22 @@ def mark_task_started(id, emp):
     if emp == 3: return redirect("/timo")
     return redirect("/manager")
 
+@app.route("/markmeasure/<int:id>/<int:emp>", methods=["POST"])
+def mark_measure(id, emp):
+    measure = request.form["measure"]
+    repair_measure = ""
+    if measure == str(1):
+        repair_measure = "Fix in flat"
+    elif measure == str(2):
+        repair_measure = "Replace"
+    sql = text("UPDATE maitasks SET repair_measure=:repair_measure WHERE id=" + str(id))
+    db.session.execute(sql, {"id:":id, "repair_measure":repair_measure})
+    db.session.commit()
+    if emp == 1: return redirect("/matti")
+    if emp == 2: return redirect("/pekka")
+    if emp == 3: return redirect("/timo")
+    return redirect("/manager")
+
 @app.route("/marktaskcompleted/<int:id>/<int:emp>", methods=["POST"])
 def mark_task_completed(id, emp):
     repair_status = "Repair completed"
@@ -305,7 +322,7 @@ def mark_task_completed(id, emp):
     return redirect("/manager")
 
 @app.route("/marktaskremoved/<int:id>/<int:emp>", methods=["POST"])
-def mark_task_removed(id,emp):
+def mark_task_removed(id, emp):
     visible = False
     sql = text("UPDATE maitasks SET visible=:visible WHERE id=:id")
     db.session.execute(sql, {"id":id, "visible":visible})
