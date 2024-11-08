@@ -73,6 +73,39 @@
       {% endfor %}
     </tbody>
   </table>
+
+  <!-- [urgent, maintenance, check, not_started, started, fix, replace, completed] -->
+  <br><h3>Tasks per device</h3>
+  <table class="table table-hover table-striped">
+    <thead class="thead-dark">
+      <tr>
+        <th>Device</th>
+        <th>Urgent</th>
+        <th>Maintenance</th>
+        <th>Check up</th>
+        <th>Not started</th>
+        <th>Started</th>
+        <th>Fix in flat</th>
+        <th>Replace</th>
+        <th>Completed</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for key, value in tasks_per_device.items() %}
+        <tr>
+          <td>{{ key }}</td>
+          <td>{{ value[0] }}</td>
+          <td>{{ value[1] }}</td>
+          <td>{{ value[2] }}</td>
+          <td>{{ value[3] }}</td>
+          <td>{{ value[4] }}</td>
+          <td>{{ value[5] }}</td>
+          <td>{{ value[6] }}</td>
+          <td>{{ value[7] }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
   
   <br><h3>Tasks per employee</h3>
   <table class="table table-hover table-striped">
@@ -100,6 +133,7 @@
         </tr>
       {% endfor %}
     </tbody>
+  </table>
 </div>
 
 {% endblock %}

@@ -213,25 +213,54 @@ def manager():
     all_tasks = result.fetchall()
     # table structure: [maintenance, check, total_to-do, not_started, started, completed]
     tasks_per_employee = {"Matti": [0,0,0,0,0,0], "Pekka": [0,0,0,0,0,0], "Timo": [0,0,0,0,0,0]}
+    # table structure: [urgent, maintenance, check, not_started, started, fix, replace, completed]
+    tasks_per_device = {"Dishwasher": [0,0,0,0,0,0,0,0], "Microwave": [0,0,0,0,0,0,0,0],
+                        "Oven": [0,0,0,0,0,0,0,0], "Stove": [0,0,0,0,0,0,0,0],
+                        "Washing machine": [0,0,0,0,0,0,0,0]}
     for item in all_tasks:
         print("item:", item)
+        # repair status
         if item[4] == "Repair completed":
-            tasks_per_employee[item[6]][5] += 1
+            if item[3] != 101:
+                tasks_per_employee[item[6]][5] += 1
+            tasks_per_device[item[2]][7] += 1
             continue
-        elif item[4] == "NA":
-            tasks_per_employee[item[6]][3] += 1
-        elif item[4] == "Repair started":
-            tasks_per_employee[item[6]][4] += 1
+        if item[3] != 101:
+            if item[4] == "NA":
+                tasks_per_employee[item[6]][3] += 1
+            elif item[4] == "Repair started":
+                tasks_per_employee[item[6]][4] += 1
+        # case type
         if item[3] == 102 or item[3] == 103:     # maintenance cases
             tasks_per_employee[item[6]][0] += 1
             tasks_per_employee[item[6]][2] += 1
         elif item[3] == 104 or item[3] == 105:   # check up cases
             tasks_per_employee[item[6]][1] += 1
             tasks_per_employee[item[6]][2] += 1
+        # devices
+        if item[3] == 101:
+            tasks_per_device[item[2]][0] += 1
+        elif item[3] == 102 or item[3] == 103:
+            tasks_per_device[item[2]][1] += 1
+        elif item[3] == 104 or item[3] == 105:
+            tasks_per_device[item[2]][2] += 1
+        if item[4] == "NA":
+            tasks_per_device[item[2]][3] += 1
+        elif item[4] == "Repair started":
+            tasks_per_device[item[2]][4] += 1
+        if item[5] == "Fix in flat":
+            tasks_per_device[item[2]][5] += 1
+        elif item[5] == "Replace":
+            tasks_per_device[item[2]][6] += 1
     print("valmis tasks_per_employee:")
     for key, value in tasks_per_employee.items():
-        print(key, value)
-    return render_template("manager.html", all_tasks=all_tasks, tasks_per_employee=tasks_per_employee)
+        print(value, key)
+    print("valmis tasks_per_device:")
+    for key, value in tasks_per_device.items():
+        print(value, key)
+    return render_template("manager.html", all_tasks=all_tasks,
+                           tasks_per_employee=tasks_per_employee,
+                           tasks_per_device=tasks_per_device)
 
 @app.route("/dashboard")
 def dash_board():
