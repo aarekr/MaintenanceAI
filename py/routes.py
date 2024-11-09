@@ -134,6 +134,13 @@ def redistribute_tasks_between_employees():
 def show_offers():
     return render_template("offers.html", all_offers_given=all_offers_given)
 
+def get_formatted_date(datetime_ticket_created):
+    date_parts = str(datetime_ticket_created).split(" ")
+    date_parts_split = date_parts[0].split("-")
+    time_parts = date_parts[1].split(".")
+    time_parts_split = time_parts[0].split(":")
+    return time_parts_split[0]+":"+time_parts_split[1]+" on "+date_parts_split[2]+"."+date_parts_split[1]+"."
+
 @app.route("/createurgentcase", methods=["POST"])
 def create_urgent_case():
     flat_number = random.randint(1, 1000)
@@ -144,8 +151,9 @@ def create_urgent_case():
     repair_status = "NA"
     repair_measure = "NA"
     employee = allocate_new_task_to_service_company(device_model)
-    time_ticket_created = datetime.now()
-    time_eta = time_ticket_created + timedelta(days=2)
+    datetime_ticket_created = datetime.now()
+    time_ticket_created = get_formatted_date(datetime_ticket_created)
+    time_eta = get_formatted_date(datetime_ticket_created + timedelta(days=2))
     resident_message = "..."
     visible = True
     sql = text("INSERT INTO maitasks (flat_number, device, device_model, error_code, repair_status, \
@@ -170,8 +178,9 @@ def create_maintenance_case():
     repair_status = "NA"
     repair_measure = "NA"
     employee = allocate_new_task_to_employee()
-    time_ticket_created = datetime.now()
-    time_eta = time_ticket_created + timedelta(days=10)
+    datetime_ticket_created = datetime.now()
+    time_ticket_created = get_formatted_date(datetime_ticket_created)
+    time_eta = get_formatted_date(datetime_ticket_created + timedelta(days=10))
     resident_message = "..."
     visible = True
     sql = text("INSERT INTO maitasks (flat_number, device, device_model, error_code, repair_status, \
@@ -196,8 +205,9 @@ def create_checkup_case():
     repair_status = "NA"
     repair_measure = "NA"
     employee = allocate_new_task_to_employee()
-    time_ticket_created = datetime.now()
-    time_eta = time_ticket_created + timedelta(days=30)
+    datetime_ticket_created = datetime.now()
+    time_ticket_created = get_formatted_date(datetime_ticket_created)
+    time_eta = get_formatted_date(datetime_ticket_created + timedelta(days=30))
     resident_message = "..."
     visible = True
     sql = text("INSERT INTO maitasks (flat_number, device, device_model, error_code, repair_status, \
