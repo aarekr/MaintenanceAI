@@ -63,7 +63,8 @@ def allocate_new_task_to_employee():
             "Mickes" in task[6] or "Petrin" in task[6] or "Uunon" in task[6] or "None" in task[6]:
             pass
         else:
-            dict_emp_tasks[task[6]] += 1
+            if task[10] != False:
+                dict_emp_tasks[task[6]] += 1
     for key, value in dict_emp_tasks.items():
         if value > max:
             max = value
@@ -89,6 +90,45 @@ def allocate_new_task_to_service_company(device_model):
         print("service offer:", item[0], item[1])
     company_and_price = str(sorted_offers[0][0]) + " " + str(sorted_offers[0][1]) + " euro"
     return company_and_price
+
+def redistribute_tasks_between_employees():
+    sql = text("SELECT * FROM maitasks")
+    result = db.session.execute(sql, {})
+    all_tasks = result.fetchall()
+    dict_emp_tasks = {"Matti": 0, "Pekka": 0, "Timo": 0}
+    min = 1000
+    max = 0
+    for task in all_tasks:
+        if "Antin" in task[6] or "Kallen" in task[6] or "Lassen" in task[6] or \
+            "Mickes" in task[6] or "Petrin" in task[6] or "Uunon" in task[6] or "None" in task[6]:
+            pass
+        else:
+            if task[10] != False:
+                dict_emp_tasks[task[6]] += 1
+    for key, value in dict_emp_tasks.items():
+        if value > max:
+            max = value
+        if value < min:
+            min = value
+    min_task_emps = []
+    max_task_emps = []
+    for name, tasks in dict_emp_tasks.items():
+        if tasks == min:
+            min_task_emps.append(name)
+        if tasks == max:
+            max_task_emps.append(name)
+    chosen_min_emp = str(random.choice(min_task_emps))
+    chosen_max_emp = random.choice(max_task_emps)
+    if max - min > 1:
+        max_id = 0
+        for item in all_tasks:
+            if item[10] == True:
+                if item[6] == chosen_max_emp:
+                    max_id = item[0]
+        sql_text = "UPDATE maitasks SET employee='" + chosen_min_emp + "' WHERE id=" + str(max_id)
+        sql = text(sql_text)
+        db.session.execute(sql, {"id":max_id, "employee":chosen_min_emp})
+        db.session.commit()
 
 @app.route("/offers")
 def show_offers():
@@ -218,7 +258,7 @@ def manager():
                         "Oven": [0,0,0,0,0,0,0,0], "Stove": [0,0,0,0,0,0,0,0],
                         "Washing machine": [0,0,0,0,0,0,0,0]}
     for item in all_tasks:
-        print("item:", item)
+        #print("item:", item)
         # repair status
         if item[4] == "Repair completed":
             if item[3] != 101:
@@ -252,12 +292,6 @@ def manager():
             tasks_per_device[item[2]][5] += 1
         elif item[5] == "Replace":
             tasks_per_device[item[2]][6] += 1
-    print("valmis tasks_per_employee:")
-    for key, value in tasks_per_employee.items():
-        print(value, key)
-    print("valmis tasks_per_device:")
-    for key, value in tasks_per_device.items():
-        print(value, key)
     return render_template("manager.html", all_tasks=all_tasks,
                            tasks_per_employee=tasks_per_employee,
                            tasks_per_device=tasks_per_device)
@@ -376,6 +410,7 @@ def mark_task_removed(id, emp):
     sql = text("UPDATE maitasks SET visible=:visible WHERE id=:id")
     db.session.execute(sql, {"id":id, "visible":visible})
     db.session.commit()
+    redistribute_tasks_between_employees()
     if emp == 1: return redirect("/matti")
     if emp == 2: return redirect("/pekka")
     if emp == 3: return redirect("/timo")

@@ -3,7 +3,9 @@
 {% block body %}
 
 <h1>DASH BOARD</h1>
-{{ all_tasks }}
+{% for item in all_tasks %}
+    {{ item }} <br>
+{% endfor %}
 
 <br>
 {{ counter }}
