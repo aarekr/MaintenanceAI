@@ -35,21 +35,46 @@ def simulator():
 def render_manager_page(all_tasks):
     return render_template("manager.html", all_tasks=all_tasks)
 
-@app.route("/startautomaticsimulator", methods=["POST"])
+automatic_simulator_started = False
+automated_tasks = []
+def start_row_adder():
+    start_index = 0
+    while start_index < 7:
+        start_index += 1
+        return render_template("automatic.html", automated_tasks=automated_tasks[start_index: start_index+2])
+
+@app.route("/semi-automatic")
 def start_automatic_simulator():
-    i = 0
-    while i < 3:
-        print(i)
-        i = i + 1
-        create_urgent_case()
-        time.sleep(2)
-        sql = text("SELECT * FROM maitasks")
-        result = db.session.execute(sql, {})
-        all_tasks = result.fetchall()
-        print("manager all_tasks:", all_tasks)
-        render_manager_page(all_tasks)
-        time.sleep(2)
-    return render_template("manager.html", all_tasks=all_tasks)
+    flat_number = random.randint(1, 1000)
+    random_index = random.choice([0, 1, 2, 3, 4])
+    device = DEVICES[random_index]
+    device_model = DEVICE_MODELS[random_index]
+    error_code = random.choice([101, 102, 103, 104, 105])
+    repair_status = "NA"
+    repair_measure = "NA"
+    row_color = ""
+    employee = ""
+    if error_code == 101:
+        employee = allocate_new_task_to_service_company(device_model)
+        row_color = "table_danger"
+    elif error_code == 102 or error_code == 103:
+        employee = random.choice(["Matti", "Pekka", "Timo"])
+        row_color = "table_warning"
+    elif error_code == 104 or error_code == 105:
+        employee = random.choice(["Matti", "Pekka", "Timo"])
+        row_color = "table_secondary"
+    datetime_ticket_created = datetime.now()
+    time_ticket_created = get_formatted_date(datetime_ticket_created)
+    time_eta = get_formatted_date(datetime_ticket_created + timedelta(days=2))
+    resident_message = "..."
+    visible = True
+    automated_tasks.append([0, flat_number, device, device_model, error_code, repair_status, repair_measure, \
+                            employee, time_ticket_created, time_eta, resident_message, \
+                            visible, None, row_color])
+    print("automatic all_tasks:", automated_tasks)
+    automatic_simulator_started = True
+    #start_row_adder()
+    return render_template("semi-automatic.html", automated_tasks=automated_tasks[-7:-1])
 
 def allocate_new_task_to_employee():
     sql = text("SELECT * FROM maitasks")

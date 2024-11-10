@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<h1>SEMI-AUTOMATIC</h1>
+<form action="/semi-automatic">
+    <input type="submit" value="CREATE CASE">
+</form> <br>
+
+<table class="table table-hover table-striped">
+    <thead class="thead-dark">
+      <tr>
+        <th>Flat</th>
+        <th>Device</th>
+        <th>Brand & Model</th>
+        <th>Error</th>
+        <th>Status</th>
+        <th>Measure</th>
+        <th>Time ticket created</th>
+        <th>Employee / Company</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for task in automated_tasks %}
+        {% if task[11] == True %}
+          <tr class={{task[12]}}>
+            <td>{{ task[1] }}</td>
+            <td>{{ task[2] }}</td>
+            <td>{{ task[3] }}</td>
+            <td>{{ task[4] }}</td>
+            <td>{{ task[5] }}</td>
+            <td>{{ task[6] }}</td>
+            <td>{{ task[7] }}</td>
+            <td>{{ task[8] }}</td>
+          </tr>
+        {% endif %}
+      {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
