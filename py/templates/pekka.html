@@ -26,10 +26,25 @@
                 <p class="card-text">Device: {{ task[2] }}</p>
                 <p class="card-text">Error code: {{ task[3] }}</p>
                 <p class="card-text">Repair status: {{ task[4] }}</p>
-                <p class="card-text">Repair measure: {{ task[5] }}</p>
-                <form action="/marktaskstarted/{{ task[0] }}/{{ 2 }}" method="POST">
-                  <input type="submit" value="Start">
-                </form>
+                <p class="card-text">Repair status: {{ task[4] }}</p>
+                  <form action="/marktaskstarted/{{ task[0] }}/{{ 2 }}" method="POST">
+                    <input type="submit" value="Start">
+                  </form>
+                {% if task[5] == 'NA' %}
+                  <p class="card-text">Repair measure: {{ task[5] }}</p>
+                  <form action="/markvisit/{{ task[0] }}/{{ task[1] }}/{{ 2 }}" method="POST">
+                    <input type="submit" value="Visit">
+                  </form>
+                {% endif %}
+                {% if task[5] == 'Visit' and task[12] == None %}
+                  <p>Suggested visiting times to resident: <br>
+                    {% for time in three_dates_list[1:] %}
+                      <li>{{ time }}</li>
+                    {% endfor %}</p>
+                {% endif %}
+                {% if task[5] == 'Visit' and task[12] != None %}
+                  <p>Agree visiting time: {{ task[12] }}</p>
+                {% endif %}
                 <p class="card-text"><small class="text-muted">Ticket created: {{ task[7] }}</small></p>
               </div>
             </div>
@@ -57,10 +72,15 @@
                 <p class="card-text">Device: {{ task[2] }}</p>
                 <p class="card-text">Error code: {{ task[3] }}</p>
                 <p class="card-text">Repair status: {{ task[4] }}</p>
-                <p class="card-text">Repair measure: {{ task[5] }}</p>
-                <form action="/marktaskcompleted/{{ task[0] }}/{{ 2 }}" method="POST">
-                  <input type="submit" value="Complete">
-                </form>
+                  <form action="/marktaskcompleted/{{ task[0] }}/{{ 2 }}" method="POST">
+                    <input type="submit" value="Complete">
+                  </form>
+                <p class="card-text">Repair measure: {{ task[5] }} at {{ task[12] }}</p>
+                  <form action="/markmeasure/{{ task[0] }}/{{ 2 }}" method="POST">
+                    <input type="radio" name="measure" value="1"> Fix in flat <br>
+                    <input type="radio" name="measure" value="2"> Replace     <br>
+                    <input type="submit" value="Save measure">
+                  </form>
                 <p class="card-text"><small class="text-muted">Ticket created: {{ task[7] }}</small></p>
               </div>
             </div>

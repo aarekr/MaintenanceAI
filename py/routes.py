@@ -6,7 +6,7 @@ from db import db
 
 import random
 from datetime import datetime, timedelta
-import time
+import time, sys
 
 DEVICES = ["Dishwasher", "Microwave", "Oven", "Stove", "Washing machine"]
 DEVICE_MODELS = ["Bosch astianpesukone SMU2HVW71S",
@@ -23,6 +23,23 @@ COMPANIES = [["Antin aparaatit Ay", "Bosch,Kenwood"],
              ["Petrin pesukoneet Oy", "Bosch,AEG"],
              ["Uunon uunit Oy", "Electrolux,Kenwood"]]
 all_offers_given = []
+
+
+
+@app.context_processor
+def inject_load():
+    if sys.platform.startswith('linux'):
+        print("linux")
+        with open('/proc/loadavg', 'rt') as f:
+            load = f.read().split()[0:3]
+    else:
+        print("else")
+        load = [int(random.random() * 100) / 100 for _ in range(3)]
+    return {'load1': load[0], 'load5': load[1], 'load15': load[2]}
+
+
+
+
 
 @app.route("/")
 def index():
@@ -268,7 +285,8 @@ def pekka():
     for item in all_tasks:
         if item[6] == 'Pekka' and item[10] == True:
             pekkas_tasks.append(item)
-    return render_template("pekka.html", pekkas_tasks=pekkas_tasks)
+    return render_template("pekka.html", pekkas_tasks=pekkas_tasks, three_dates_list=three_dates_list,
+                           suggested_visit_times=suggested_visit_times)
 
 @app.route("/timo")
 def timo():
@@ -279,7 +297,8 @@ def timo():
     for item in all_tasks:
         if item[6] == 'Timo' and item[10] == True:
             timos_tasks.append(item)
-    return render_template("timo.html", timos_tasks=timos_tasks)
+    return render_template("timo.html", timos_tasks=timos_tasks, three_dates_list=three_dates_list,
+                           suggested_visit_times=suggested_visit_times)
 
 @app.route("/manager")
 def manager():
