@@ -5,6 +5,115 @@
 <div class="container">
     <h1>REPAIR RECOMMENDATIONS</h1>
     <hr>
+    <!--{{ flat_info }} <br>
+    {{ repair_flow }} <br>
+    {{ repair_flow_index}} <br>-->
+    <table>
+        <tr>
+            <td><b>Flat</b></td>
+            <td>{{ flat_info[1] }}</td>
+        </tr>
+        <tr>
+            <td><b>Device</b></td>
+            <td>{{ flat_info[2] }}</td>
+        </tr>
+        <tr>
+            <td><b>Model</b></td>
+            <td>{{ flat_info[11] }}</td>
+        </tr>
+        <tr>
+            <td width="100"><b>Error code</b></td>
+            <td>{{ flat_info[3] }}, 
+                {% if flat_info[3] == 102 or flat_info[3] == 103 %}
+                    no electricity
+                {% endif %}</td>
+        </tr>
+    </table>
+    <hr>
+    <p>
+        <b>Suggested repair measure: </b> {{ repair_flow[repair_flow_index] }}
+        {% if repair_flow_index == 1 %}
+            <br>Did it help? Is there electricity in the device? <br>
+            <form action="/repairrecommendations/{{ flat_info[1] }}/{{ 2 }}/{{ 0 }}" method="POST">
+                <input type="submit" value="Yes">
+            </form>
+            <form action="/repairrecommendations/{{ flat_info[1] }}/{{ 7 }}/{{ 0 }}" method="POST">
+                <input type="submit" value="No">
+            </form>
+        {% endif %}
+        {% if repair_flow_index == 2 %}
+            <form action="/repairrecommendations/{{ flat_info[1] }}/{{ 99 }}/{{ 0 }}" method="POST">
+                <input type="submit" value="Yes">
+            </form>
+            <form action="/repairrecommendations/{{ flat_info[1] }}/{{ 3 }}/{{ 0 }}" method="POST">
+                <input type="submit" value="No">
+            </form>
+        {% endif %}
+        {% if repair_flow_index == 3 %}
+            <form action="/repairrecommendations/{{ flat_info[1] }}/{{ 4 }}/{{ 0 }}" method="POST">
+                <input type="submit" value="Yes">
+            </form>
+            <form action="/repairrecommendations/{{ flat_info[1] }}/{{ 5 }}/{{ 0 }}" method="POST">
+                <input type="submit" value="No">
+            </form>
+        {% endif %}
+        {% if repair_flow_index == 4 %}
+            <form action="/repairrecommendations/{{ flat_info[1] }}/{{ 6 }}/{{ 123 }}" method="POST">
+                <input type="submit" value="E:123">
+            </form>
+            <form action="/repairrecommendations/{{ flat_info[1] }}/{{ 6 }}/{{ 456 }}" method="POST">
+                <input type="submit" value="E:456">
+            </form>
+            <form action="/repairrecommendations/{{ flat_info[1] }}/{{ 6 }}/{{ 789 }}" method="POST">
+                <input type="submit" value="E:789">
+            </form>
+        {% endif %}
+        {% if repair_flow_index == 6 %}
+            <br><a href="/">Link to manual</a> <br>
+            <a href="/">Link to instruction video</a> <br>
+            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#staticBackdrop">
+                Show short description
+            </button>
+            <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Guide for error {{ device_e_error_code }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    <div class="modal-body">
+                        Manual text here <br>
+                        Manual text here <br>
+                        Manual text here <br>
+                        Manual text here <br>
+                        Manual text here <br>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary">Understood</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+                </div>
+            </div>
+        {% endif %}
+        {% if repair_flow_index == 7 %}
+            <br>Did it help? Is there electricity in the device? <br>
+            <form action="/repairrecommendations/{{ flat_info[1] }}/{{ 2 }}/{{ 0 }}" method="POST">
+                <input type="submit" value="Yes">
+            </form>
+            <form action="/repairrecommendations/{{ flat_info[1] }}/{{ 100 }}/{{ 0 }}" method="POST">
+                <input type="submit" value="No">
+            </form>
+        {% endif %}
+        {% if repair_flow_index == 100 %}
+            <br>Ask to replace the device <br>
+            <form action="/repairrecommendations/{{ flat_info[1] }}/{{ 100 }}/{{ 0 }}" method="POST">
+                <input type="submit" value="Replace device">
+            </form>
+        {% endif %}
+    </p>
 </div>
 
 {% endblock %}

@@ -29,7 +29,6 @@ all_offers_given = []
 @app.context_processor
 def inject_load():
     if sys.platform.startswith('linux'):
-        print("linux")
         with open('/proc/loadavg', 'rt') as f:
             load = f.read().split()[0:3]
     else:
@@ -470,6 +469,32 @@ def mark_task_removed(id, emp):
     if emp == 3: return redirect("/timo")
     return redirect("/manager")
 
-@app.route("/repairrecommendations")
-def repair_recommendations():
-    return render_template("repair_recommendations.html")
+REPAIR_FLOW = ["",
+               "Unplug the power cable from the socket and plug it in again.",
+               "Does the device function now?",
+               "Does it show any error codes?",
+               "Which of these error codes?",
+               "",
+               "",
+               "Double check that the power cable is OK."]
+
+#  99 device OK      -> redirect to employee
+# 100 replace device -> ask for offers
+
+@app.route("/repairrecommendations/<int:flat>/<int:answer>/<int:e_error>", methods=["GET", "POST"])
+def repair_recommendations(flat, answer, e_error):
+    print("repair recommendations flat:", flat, "answer:", answer)
+    sql = text("SELECT * FROM maitasks WHERE flat_number=" + str(flat))
+    result = db.session.execute(sql, {"flat_number":flat})
+    flat_info = result.fetchone()
+    DEVICE_E_ERROR_CODE = "E:" + str(e_error)
+    print("E_ERROR:", DEVICE_E_ERROR_CODE)
+    if answer == 99:  # device functions, return to employee page
+        print("answer 99")
+        print("flat_info:", flat_info[6].lower())
+        mark_task_completed(flat_info[0], 1)
+        address = "/" + str(flat_info[6].lower())
+        return redirect(address)
+    return render_template("repair_recommendations.html", flat_info=flat_info,
+                           repair_flow=REPAIR_FLOW, repair_flow_index=answer,
+                           device_e_error_code=DEVICE_E_ERROR_CODE)

@@ -5,8 +5,8 @@
 <h1>FLAT {{ flat_info[1] }}</h1>
 <!--{{ flat_info }} <br>
 {{ suggested_visit_times }}-->
-<table>
-    <thead>
+<table class="table table-hover table-striped">
+    <thead class="thead-light">
         <tr>
             <th width="100">Device</th>
             <th width="140">Repair status</th>
@@ -19,14 +19,14 @@
     <tbody>
         <tr>
             <td>{{ flat_info[2] }}</td>
-            <td align="center">{{ flat_info[4] }}</td>
-            <td align="center">{{ flat_info[5] }}</td>
-            <td>ETA here</td>
-            <td align="center">{{ flat_info[6] }}</td>
+            <td>{{ flat_info[4] }}</td>
+            <td>{{ flat_info[5] }}</td>
+            <td>{{ flat_info[8] }}</td>
+            <td>{{ flat_info[6] }}</td>
             <td>{% if flat_info[12] == None %}
                     {% if (flat_info[1], flat_info[6]) in suggested_visit_times %}
                         <form action="chooseservicetime/{{ flat_info[0] }}/{{ flat_info[1] }}/{{ 1 }}">
-                            <input type="submit" value="Accept"></input>
+                            <input type="submit" value="Accept" data-target="#exampleModal"></input>
                             <label>{{ suggested_visit_times[(flat_info[1], flat_info[6])][1][1] }}</label>
                         </form>
                         <form action="chooseservicetime/{{ flat_info[0] }}/{{ flat_info[1] }}/{{ 2 }}">
@@ -37,6 +37,7 @@
                             <input type="submit" value="Accept"></input>
                             <label>{{ suggested_visit_times[(flat_info[1], flat_info[6])][1][3] }}</label>
                         </form>
+                        {% include "modal_visit_time_confirmation.html" %}
                     {% endif %}
                 {% endif %}
                 {% if flat_info[12] != None %}
