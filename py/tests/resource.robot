@@ -7,9 +7,9 @@ ${SERVER}       localhost:5000/
 ${BROWSER}      Chrome
 ${DELAY}        0.2 seconds
 ${HOME_URL}     http://${SERVER}
-${MATTIS_URL}   http://${SERVER}/matti
-${PEKKAS_URL}   http://${SERVER}/pekka
-${TIMOS_URL}    http://${SERVER}/timo
+${MATTI_URL}    http://${SERVER}/matti
+${PEKKA_URL}    http://${SERVER}/pekka
+${TIMO_URL}     http://${SERVER}/timo
 ${MANAGER_URL}  http://${SERVER}/manager
 ${OFFERS_URL}   http://${SERVER}/offers
 
@@ -23,15 +23,15 @@ Simulators Page Should Be Open
     Title Should Be     Maintenance AI
 
 Open Browser To Mattis Page
-    Open Browser        ${MATTIS_URL}   ${BROWSER}
+    Open Browser        ${MATTI_URL}    ${BROWSER}
     Set Selenium Speed  ${DELAY}
 
 Open Browser To Pekkas Page
-    Open Browser        ${PEKKAS_URL}   ${BROWSER}
+    Open Browser        ${PEKKA_URL}    ${BROWSER}
     Set Selenium Speed  ${DELAY}
 
 Open Browser To Timos Page
-    Open Browser        ${TIMOS_URL}    ${BROWSER}
+    Open Browser        ${TIMO_URL}     ${BROWSER}
     Set Selenium Speed  ${DELAY}
 
 Open Browser To Manager Page
