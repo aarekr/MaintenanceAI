@@ -494,6 +494,7 @@ def repair_recommendations(flat, answer, e_error):
         print("flat_info:", flat_info[6].lower())
         mark_task_completed(flat_info[0], 1)
         address = "/" + str(flat_info[6].lower())
+        answer = 0
         return redirect(address)
     return render_template("repair_recommendations.html", flat_info=flat_info,
                            repair_flow=REPAIR_FLOW, repair_flow_index=answer,
