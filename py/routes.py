@@ -1,12 +1,12 @@
+import sys
+import random
+from datetime import datetime, timedelta
+
 from flask import render_template, redirect, request
 from sqlalchemy.sql import text
 
 from app import app
 from db import db
-
-import random
-from datetime import datetime, timedelta
-import time, sys
 
 DEVICES = ["Dishwasher", "Microwave", "Oven", "Stove", "Washing machine"]
 DEVICE_MODELS = ["Bosch astianpesukone SMU2HVW71S",
@@ -57,7 +57,8 @@ def start_row_adder():
     start_index = 0
     while start_index < 7:
         start_index += 1
-        return render_template("automatic.html", automated_tasks=automated_tasks[start_index: start_index+2])
+        return render_template("automatic.html",
+                               automated_tasks=automated_tasks[start_index: start_index+2])
 
 @app.route("/semi-automatic")
 def start_automatic_simulator():
@@ -84,9 +85,9 @@ def start_automatic_simulator():
     time_eta = get_formatted_date(datetime_ticket_created + timedelta(days=2))
     resident_message = "..."
     visible = True
-    automated_tasks.append([0, flat_number, device, device_model, error_code, repair_status, repair_measure, \
-                            employee, time_ticket_created, time_eta, resident_message, \
-                            visible, None, row_color])
+    automated_tasks.append([0, flat_number, device, device_model, error_code, repair_status, \
+                            repair_measure, employee, time_ticket_created, time_eta, \
+                            resident_message, visible, None, row_color])
     print("automatic all_tasks:", automated_tasks)
     automatic_simulator_started = True
     #start_row_adder()
@@ -101,7 +102,8 @@ def allocate_new_task_to_employee():
     max = 0
     for task in all_tasks:
         if "Antin" in task[6] or "Kallen" in task[6] or "Lassen" in task[6] or \
-            "Mickes" in task[6] or "Petrin" in task[6] or "Uunon" in task[6] or "None" in task[6]:
+            "Mickes" in task[6] or "Petrin" in task[6] or "Uunon" in task[6] or \
+            "None" in task[6]:
             pass
         else:
             if task[10] != False:
@@ -197,15 +199,18 @@ def create_urgent_case():
     time_eta = get_formatted_date(datetime_ticket_created + timedelta(days=2))
     resident_message = "..."
     visible = True
-    sql = text("INSERT INTO maitasks (flat_number, device, device_model, error_code, repair_status, \
-               repair_measure, employee, time_ticket_created, time_eta, resident_message, visible) VALUES \
-               (:flat_number, :device, :device_model, :error_code, :repair_status, :repair_measure, \
-               :employee, :time_ticket_created, :time_eta, :resident_message, :visible)")
+    sql = text("INSERT INTO maitasks (flat_number, device, device_model, error_code, \
+               repair_status, repair_measure, employee, time_ticket_created, time_eta, \
+               resident_message, visible) VALUES \
+               (:flat_number, :device, :device_model, :error_code, :repair_status, \
+               :repair_measure, :employee, :time_ticket_created, :time_eta, :resident_message, \
+               :visible)")
     db.session.execute(sql, {"flat_number":flat_number, "device":device, \
                              "device_model":device_model, "error_code":error_code, \
                              "repair_status":repair_status, "repair_measure":repair_measure, \
                                 "employee":employee, "time_ticket_created":time_ticket_created, \
-                                "time_eta":time_eta, "resident_message":resident_message, "visible":visible})
+                                "time_eta":time_eta, "resident_message":resident_message, \
+                                "visible":visible})
     db.session.commit()
     return redirect("/simulator")
 
@@ -224,15 +229,18 @@ def create_maintenance_case():
     time_eta = get_formatted_date(datetime_ticket_created + timedelta(days=10))
     resident_message = "..."
     visible = True
-    sql = text("INSERT INTO maitasks (flat_number, device, device_model, error_code, repair_status, \
-               repair_measure, employee, time_ticket_created, time_eta, resident_message, visible) VALUES \
-               (:flat_number, :device, :device_model, :error_code, :repair_status, :repair_measure, \
-               :employee, :time_ticket_created, :time_eta, :resident_message, :visible)")
+    sql = text("INSERT INTO maitasks (flat_number, device, device_model, error_code, \
+               repair_status, repair_measure, employee, time_ticket_created, time_eta, \
+               resident_message, visible) VALUES \
+               (:flat_number, :device, :device_model, :error_code, :repair_status, \
+               :repair_measure, :employee, :time_ticket_created, :time_eta, :resident_message, \
+               :visible)")
     db.session.execute(sql, {"flat_number":flat_number, "device":device, \
                              "device_model":device_model, "error_code":error_code, \
                              "repair_status":repair_status, "repair_measure":repair_measure, \
                                 "employee":employee, "time_ticket_created":time_ticket_created, \
-                                "time_eta":time_eta, "resident_message":resident_message, "visible":visible})
+                                "time_eta":time_eta, "resident_message":resident_message, \
+                                "visible":visible})
     db.session.commit()
     return redirect("/simulator")
 
@@ -251,15 +259,18 @@ def create_checkup_case():
     time_eta = get_formatted_date(datetime_ticket_created + timedelta(days=30))
     resident_message = "..."
     visible = True
-    sql = text("INSERT INTO maitasks (flat_number, device, device_model, error_code, repair_status, \
-               repair_measure, employee, time_ticket_created, time_eta, resident_message, visible) VALUES \
-               (:flat_number, :device, :device_model, :error_code, :repair_status, :repair_measure, \
-               :employee, :time_ticket_created, :time_eta, :resident_message, :visible)")
+    sql = text("INSERT INTO maitasks (flat_number, device, device_model, error_code, \
+               repair_status, repair_measure, employee, time_ticket_created, time_eta, \
+               resident_message, visible) VALUES \
+               (:flat_number, :device, :device_model, :error_code, :repair_status, \
+               :repair_measure, :employee, :time_ticket_created, :time_eta, :resident_message, \
+               :visible)")
     db.session.execute(sql, {"flat_number":flat_number, "device":device, \
                              "device_model":device_model, "error_code":error_code, \
                              "repair_status":repair_status, "repair_measure":repair_measure, \
                                 "employee":employee, "time_ticket_created":time_ticket_created, \
-                                "time_eta":time_eta, "resident_message":resident_message, "visible":visible})
+                                "time_eta":time_eta, "resident_message":resident_message, \
+                                "visible":visible})
     db.session.commit()
     return redirect("/simulator")
 
@@ -272,7 +283,8 @@ def matti():
     for item in all_tasks:
         if item[6] == "Matti" and item[10] == True:
             mattis_tasks.append(item)
-    return render_template("matti.html", mattis_tasks=mattis_tasks, three_dates_list=three_dates_list,
+    return render_template("matti.html", mattis_tasks=mattis_tasks,
+                           three_dates_list=three_dates_list,
                            suggested_visit_times=suggested_visit_times)
 
 @app.route("/pekka")
@@ -284,7 +296,8 @@ def pekka():
     for item in all_tasks:
         if item[6] == 'Pekka' and item[10] == True:
             pekkas_tasks.append(item)
-    return render_template("pekka.html", pekkas_tasks=pekkas_tasks, three_dates_list=three_dates_list,
+    return render_template("pekka.html", pekkas_tasks=pekkas_tasks,
+                           three_dates_list=three_dates_list,
                            suggested_visit_times=suggested_visit_times)
 
 @app.route("/timo")
@@ -296,7 +309,8 @@ def timo():
     for item in all_tasks:
         if item[6] == 'Timo' and item[10] == True:
             timos_tasks.append(item)
-    return render_template("timo.html", timos_tasks=timos_tasks, three_dates_list=three_dates_list,
+    return render_template("timo.html", timos_tasks=timos_tasks,
+                           three_dates_list=three_dates_list,
                            suggested_visit_times=suggested_visit_times)
 
 @app.route("/manager")
@@ -365,26 +379,30 @@ def page(id):
     result = db.session.execute(sql, {"flat_number":id})
     flat_info = result.fetchone()
     print("flat_info:", flat_info)
-    return render_template("flat.html", flat_info=flat_info, suggested_visit_times=suggested_visit_times)
+    return render_template("flat.html", flat_info=flat_info,
+                           suggested_visit_times=suggested_visit_times)
 
-def getEmployeeNameWithId(id):
-    if id == 1: return "Matti"
-    elif id == 2: return "Pekka"
-    elif id == 3: return "Timo"
+def get_employee_name_with_id(id):
+    if id == 1:
+        return "Matti"
+    elif id == 2:
+        return "Pekka"
+    elif id == 3:
+        return "Timo"
     return "No name"
 
-def getWeekday(date):
+def get_weekday(date):
     days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
     return str(days[date.weekday()])
 
-def getSuggestedServiceDates():
+def get_suggested_service_dates():
     date_1 = datetime.now() + timedelta(days=1)
-    date_1 = str(date_1.hour)+":00 "+getWeekday(date_1)+" "+str(date_1.day)+"."+str(date_1.month)+"."
+    date_1 = str(date_1.hour)+":00 "+get_weekday(date_1)+" "+str(date_1.day)+"."+str(date_1.month)+"."
     date_2 = datetime.now() + timedelta(days=1, hours=2)
-    date_2 = str(date_2.hour)+":00 "+getWeekday(date_2)+" "+str(date_2.day)+"."+str(date_2.month)+"."
+    date_2 = str(date_2.hour)+":00 "+get_weekday(date_2)+" "+str(date_2.day)+"."+str(date_2.month)+"."
     date_3 = datetime.now() + timedelta(days=1, hours=5)
-    date_3 = str(date_3.hour)+":00 "+getWeekday(date_3)+" "+str(date_3.day)+"."+str(date_3.month)+"."
-    #suggested_visit_times[(725, "Matti")] = [0, ["Not chosen", date_1, date_2, date_3]]  # remove this
+    date_3 = str(date_3.hour)+":00 "+get_weekday(date_3)+" "+str(date_3.day)+"."+str(date_3.month)+"."
+    #suggested_visit_times[(725, "Matti")] = [0, ["Not chosen", date_1, date_2, date_3]]  # remove
     three_dates_list.append("Not chosen")
     three_dates_list.append(date_1)
     three_dates_list.append(date_2)
@@ -399,12 +417,15 @@ def mark_visit(id, flat, emp):
     sql = text("UPDATE maitasks SET repair_measure=:repair_measure WHERE id=:id")
     db.session.execute(sql, {"id":id, "repair_measure":repair_measure})
     db.session.commit()
-    threeDatesList = getSuggestedServiceDates()
+    threeDatesList = get_suggested_service_dates()
     print("threeDatesList:", threeDatesList)
-    suggested_visit_times[(flat, getEmployeeNameWithId(emp))] = [0, threeDatesList]
-    if emp == 1: return redirect("/matti")
-    if emp == 2: return redirect("/pekka")
-    if emp == 3: return redirect("/timo")
+    suggested_visit_times[(flat, get_employee_name_with_id(emp))] = [0, threeDatesList]
+    if emp == 1:
+        return redirect("/matti")
+    if emp == 2:
+        return redirect("/pekka")
+    if emp == 3:
+        return redirect("/timo")
     return redirect("/manager")
 
 @app.route("/flat/chooseservicetime/<int:id>/<int:flat>/<int:time>")
@@ -425,9 +446,12 @@ def mark_task_started(id, emp):
     sql = text("UPDATE maitasks SET repair_status=:repair_status WHERE id=:id")
     db.session.execute(sql, {"id":id, "repair_status":repair_status})
     db.session.commit()
-    if emp == 1: return redirect("/matti")
-    if emp == 2: return redirect("/pekka")
-    if emp == 3: return redirect("/timo")
+    if emp == 1:
+        return redirect("/matti")
+    if emp == 2:
+        return redirect("/pekka")
+    if emp == 3:
+        return redirect("/timo")
     return redirect("/manager")
 
 @app.route("/markmeasure/<int:id>/<int:emp>", methods=["POST"])
@@ -441,9 +465,12 @@ def mark_measure(id, emp):
     sql = text("UPDATE maitasks SET repair_measure=:repair_measure WHERE id=" + str(id))
     db.session.execute(sql, {"id:":id, "repair_measure":repair_measure})
     db.session.commit()
-    if emp == 1: return redirect("/matti")
-    if emp == 2: return redirect("/pekka")
-    if emp == 3: return redirect("/timo")
+    if emp == 1:
+        return redirect("/matti")
+    if emp == 2:
+        return redirect("/pekka")
+    if emp == 3:
+        return redirect("/timo")
     return redirect("/manager")
 
 @app.route("/marktaskcompleted/<int:id>/<int:emp>", methods=["POST"])
@@ -452,9 +479,12 @@ def mark_task_completed(id, emp):
     sql = text("UPDATE maitasks SET repair_status=:repair_status WHERE id=:id")
     db.session.execute(sql, {"id":id, "repair_status":repair_status})
     db.session.commit()
-    if emp == 1: return redirect("/matti")
-    if emp == 2: return redirect("/pekka")
-    if emp == 3: return redirect("/timo")
+    if emp == 1:
+        return redirect("/matti")
+    if emp == 2:
+        return redirect("/pekka")
+    if emp == 3:
+        return redirect("/timo")
     return redirect("/manager")
 
 @app.route("/marktaskremoved/<int:id>/<int:emp>", methods=["POST"])
@@ -464,9 +494,12 @@ def mark_task_removed(id, emp):
     db.session.execute(sql, {"id":id, "visible":visible})
     db.session.commit()
     redistribute_tasks_between_employees()
-    if emp == 1: return redirect("/matti")
-    if emp == 2: return redirect("/pekka")
-    if emp == 3: return redirect("/timo")
+    if emp == 1:
+        return redirect("/matti")
+    if emp == 2:
+        return redirect("/pekka")
+    if emp == 3:
+        return redirect("/timo")
     return redirect("/manager")
 
 REPAIR_FLOW = ["",
