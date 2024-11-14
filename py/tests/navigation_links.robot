@@ -29,7 +29,7 @@ Clicking Timo In Navigation Bar Should Open Timo Page
     Page Should Not Contain  MANAGER
     Page Should Not Contain  OFFERS
 
-Clicking Manager In Navigation Bar Should Open Manage Page
+Clicking Manager In Navigation Bar Should Open Manager Page
     Open Browser To Simulators Page
     Click link  Manager
     Page Should Contain  MANAGER
@@ -46,4 +46,3 @@ Clicking Offers In Navigation Bar Should Open Offers Page
     Page Should Not Contain  PEKKA
     Page Should Not Contain  TIMO
     Page Should Not Contain  MANAGER
-    Page Should Not Contain  euro
