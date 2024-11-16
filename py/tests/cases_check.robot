@@ -15,3 +15,25 @@ Check Case Can Be Removed From The List
     Click Button  Remove
     Page Should Contain  MANAGER
     Page Should Not Contain  10
+
+Creating Three Maintenance Cases Allocates One Task To Each Employee
+    Open Browser To Simulators Page
+    Click Button  CHECK
+    Click Button  CHECK
+    Click Button  CHECK
+    Click link  Matti
+    Page Should Contain  Flat
+    Page Should Contain  Repair measure
+    Click link  Pekka
+    Page Should Contain  Flat
+    Page Should Contain  Repair measure
+    Click link  Timo
+    Page Should Contain  Flat
+    Page Should Contain  Repair measure
+    Click link  Manager
+    Page Should Contain  Matti
+    Page Should Contain  Pekka
+    Page Should Contain  Timo
+    Click Button  Remove
+    Click Button  Remove
+    Click Button  Remove
