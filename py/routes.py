@@ -8,6 +8,8 @@ from sqlalchemy.sql import text
 from app import app
 from db import db
 
+import functions as f
+
 DEVICES = ["Dishwasher", "Microwave", "Oven", "Stove", "Washing machine"]
 DEVICE_MODELS = ["Bosch astianpesukone SMU2HVW71S",
                  "Kenwood mikroaaltouuni K30CSS21E",
@@ -16,29 +18,22 @@ DEVICE_MODELS = ["Bosch astianpesukone SMU2HVW71S",
                  "AEG pyykinpesukone LR734EX4E"]
 ERROR_CODES = [101, 102, 103, 104, 105]
 EMPLOYEES = ["Matti", "Pekka", "Timo"]
+REPAIR_FLOW = ["",
+               "Unplug the power cable from the socket and plug it in again.",
+               "Does the device function now?",
+               "Does it show any error codes?",
+               "Which of these error codes?",
+               "",
+               "",
+               "Double check that the power cable is OK."]
 COMPANIES = [["Antin aparaatit Ay", "Bosch,Kenwood"],
              ["Kallen koneet Ky", "Electrolux,Hisense"],
              ["Lassen liesipalvelu LLC", "Hisense"],
              ["Mickes maskiner AB", "Bosch,AEG"],
              ["Petrin pesukoneet Oy", "Bosch,AEG"],
              ["Uunon uunit Oy", "Electrolux,Kenwood"]]
+
 all_offers_given = []
-
-
-
-@app.context_processor
-def inject_load():
-    if sys.platform.startswith('linux'):
-        with open('/proc/loadavg', 'rt') as f:
-            load = f.read().split()[0:3]
-    else:
-        print("else")
-        load = [int(random.random() * 100) / 100 for _ in range(3)]
-    return {'load1': load[0], 'load5': load[1], 'load15': load[2]}
-
-
-
-
 
 @app.route("/")
 def index():
@@ -72,7 +67,7 @@ def start_automatic_simulator():
     row_color = ""
     employee = ""
     if error_code == 101:
-        employee = allocate_new_task_to_service_company(device_model)
+        employee = f.allocate_new_task_to_service_company(device_model, COMPANIES)
         row_color = "table_danger"
     elif error_code == 102 or error_code == 103:
         employee = random.choice(["Matti", "Pekka", "Timo"])
@@ -81,8 +76,8 @@ def start_automatic_simulator():
         employee = random.choice(["Matti", "Pekka", "Timo"])
         row_color = "table_secondary"
     datetime_ticket_created = datetime.now()
-    time_ticket_created = get_formatted_date(datetime_ticket_created)
-    time_eta = get_formatted_date(datetime_ticket_created + timedelta(days=2))
+    time_ticket_created = f.get_formatted_date(datetime_ticket_created)
+    time_eta = f.get_formatted_date(datetime_ticket_created + timedelta(days=2))
     resident_message = "..."
     visible = True
     automated_tasks.append([0, flat_number, device, device_model, error_code, repair_status, \
@@ -97,42 +92,9 @@ def allocate_new_task_to_employee():
     sql = text("SELECT * FROM maitasks")
     result = db.session.execute(sql, {})
     all_tasks = result.fetchall()
-    dict_emp_tasks = {"Matti": 0, "Pekka": 0, "Timo": 0}
-    min = 1000
-    max = 0
-    for task in all_tasks:
-        if "Antin" in task[6] or "Kallen" in task[6] or "Lassen" in task[6] or \
-            "Mickes" in task[6] or "Petrin" in task[6] or "Uunon" in task[6] or \
-            "None" in task[6]:
-            pass
-        else:
-            if task[10] != False:
-                dict_emp_tasks[task[6]] += 1
-    for key, value in dict_emp_tasks.items():
-        if value > max:
-            max = value
-        if value < min:
-            min = value
-    min_task_emps = []
-    for name, tasks in dict_emp_tasks.items():
-        if tasks == min:
-            min_task_emps.append(name)
+    min_task_emps = f.get_min_task_emps(all_tasks)
     chosen_emp = random.choice(min_task_emps)
     return chosen_emp
-
-def allocate_new_task_to_service_company(device_model):
-    brand = device_model.split(" ")[0]
-    offers = {}
-    for item in COMPANIES:
-        if brand in item[1]:
-            offers[item[0]] = 100 + random.randint(0, 100)
-            #all_offers_given.append([item[0], offers[item[0]]])
-    sorted_offers = sorted(offers.items(), key=lambda x:x[1])
-    all_offers_given.append(offers)
-    for item in sorted_offers:
-        print("service offer:", item[0], item[1])
-    company_and_price = str(sorted_offers[0][0]) + " " + str(sorted_offers[0][1]) + " euro"
-    return company_and_price
 
 def redistribute_tasks_between_employees():
     sql = text("SELECT * FROM maitasks")
@@ -177,13 +139,6 @@ def redistribute_tasks_between_employees():
 def show_offers():
     return render_template("offers.html", all_offers_given=all_offers_given)
 
-def get_formatted_date(datetime_ticket_created):
-    date_parts = str(datetime_ticket_created).split(" ")
-    date_parts_split = date_parts[0].split("-")
-    time_parts = date_parts[1].split(".")
-    time_parts_split = time_parts[0].split(":")
-    return time_parts_split[0]+":"+time_parts_split[1]+" on "+date_parts_split[2]+"."+date_parts_split[1]+"."
-
 @app.route("/createurgentcase", methods=["POST"])
 def create_urgent_case():
     flat_number = random.randint(1, 1000)
@@ -193,10 +148,14 @@ def create_urgent_case():
     error_code = 101
     repair_status = "NA"
     repair_measure = "NA"
-    employee = allocate_new_task_to_service_company(device_model)
+    employee, all_offers = f.allocate_new_task_to_service_company(device_model, COMPANIES)
+    print("all_offers:", all_offers)
+    for offer in all_offers:
+        print("---> offer:", offer)
+        all_offers_given.append(offer)
     datetime_ticket_created = datetime.now()
-    time_ticket_created = get_formatted_date(datetime_ticket_created)
-    time_eta = get_formatted_date(datetime_ticket_created + timedelta(days=2))
+    time_ticket_created = f.get_formatted_date(datetime_ticket_created)
+    time_eta = f.get_formatted_date(datetime_ticket_created + timedelta(days=2))
     resident_message = "..."
     visible = True
     sql = text("INSERT INTO maitasks (flat_number, device, device_model, error_code, \
@@ -225,8 +184,8 @@ def create_maintenance_case():
     repair_measure = "NA"
     employee = allocate_new_task_to_employee()
     datetime_ticket_created = datetime.now()
-    time_ticket_created = get_formatted_date(datetime_ticket_created)
-    time_eta = get_formatted_date(datetime_ticket_created + timedelta(days=10))
+    time_ticket_created = f.get_formatted_date(datetime_ticket_created)
+    time_eta = f.get_formatted_date(datetime_ticket_created + timedelta(days=10))
     resident_message = "..."
     visible = True
     sql = text("INSERT INTO maitasks (flat_number, device, device_model, error_code, \
@@ -255,8 +214,8 @@ def create_checkup_case():
     repair_measure = "NA"
     employee = allocate_new_task_to_employee()
     datetime_ticket_created = datetime.now()
-    time_ticket_created = get_formatted_date(datetime_ticket_created)
-    time_eta = get_formatted_date(datetime_ticket_created + timedelta(days=30))
+    time_ticket_created = f.get_formatted_date(datetime_ticket_created)
+    time_eta = f.get_formatted_date(datetime_ticket_created + timedelta(days=30))
     resident_message = "..."
     visible = True
     sql = text("INSERT INTO maitasks (flat_number, device, device_model, error_code, \
@@ -382,27 +341,13 @@ def page(id):
     return render_template("flat.html", flat_info=flat_info,
                            suggested_visit_times=suggested_visit_times)
 
-def get_employee_name_with_id(id):
-    if id == 1:
-        return "Matti"
-    elif id == 2:
-        return "Pekka"
-    elif id == 3:
-        return "Timo"
-    return "No name"
-
-def get_weekday(date):
-    days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-    return str(days[date.weekday()])
-
 def get_suggested_service_dates():
     date_1 = datetime.now() + timedelta(days=1)
-    date_1 = str(date_1.hour)+":00 "+get_weekday(date_1)+" "+str(date_1.day)+"."+str(date_1.month)+"."
+    date_1 = str(date_1.hour)+":00 "+f.get_weekday(date_1)+" "+str(date_1.day)+"."+str(date_1.month)+"."
     date_2 = datetime.now() + timedelta(days=1, hours=2)
-    date_2 = str(date_2.hour)+":00 "+get_weekday(date_2)+" "+str(date_2.day)+"."+str(date_2.month)+"."
+    date_2 = str(date_2.hour)+":00 "+f.get_weekday(date_2)+" "+str(date_2.day)+"."+str(date_2.month)+"."
     date_3 = datetime.now() + timedelta(days=1, hours=5)
-    date_3 = str(date_3.hour)+":00 "+get_weekday(date_3)+" "+str(date_3.day)+"."+str(date_3.month)+"."
-    #suggested_visit_times[(725, "Matti")] = [0, ["Not chosen", date_1, date_2, date_3]]  # remove
+    date_3 = str(date_3.hour)+":00 "+f.get_weekday(date_3)+" "+str(date_3.day)+"."+str(date_3.month)+"."
     three_dates_list.append("Not chosen")
     three_dates_list.append(date_1)
     three_dates_list.append(date_2)
@@ -419,7 +364,7 @@ def mark_visit(id, flat, emp):
     db.session.commit()
     threeDatesList = get_suggested_service_dates()
     print("threeDatesList:", threeDatesList)
-    suggested_visit_times[(flat, get_employee_name_with_id(emp))] = [0, threeDatesList]
+    suggested_visit_times[(flat, f.get_employee_name_with_id(emp))] = [0, threeDatesList]
     if emp == 1:
         return redirect("/matti")
     if emp == 2:
@@ -501,15 +446,6 @@ def mark_task_removed(id, emp):
     if emp == 3:
         return redirect("/timo")
     return redirect("/manager")
-
-REPAIR_FLOW = ["",
-               "Unplug the power cable from the socket and plug it in again.",
-               "Does the device function now?",
-               "Does it show any error codes?",
-               "Which of these error codes?",
-               "",
-               "",
-               "Double check that the power cable is OK."]
 
 #  99 device OK      -> redirect to employee
 # 100 replace device -> ask for offers
