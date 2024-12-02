@@ -46,14 +46,7 @@ def simulator():
 def render_manager_page(all_tasks):
     return render_template("manager.html", all_tasks=all_tasks)
 
-automatic_simulator_started = False
 automated_tasks = []
-def start_row_adder():
-    start_index = 0
-    while start_index < 7:
-        start_index += 1
-        return render_template("automatic.html",
-                               automated_tasks=automated_tasks[start_index: start_index+2])
 
 @app.route("/semi-automatic")
 def start_automatic_simulator():
@@ -324,12 +317,10 @@ def manager():
 
 @app.route("/dashboard")
 def dash_board():
-    i = 0
-    while i < 10:
-        sql = text("SELECT * FROM maitasks")
-        result = db.session.execute(sql, {})
-        all_tasks = result.fetchall()
-        return render_template("dashboard.html", all_tasks=all_tasks)
+    sql = text("SELECT * FROM maitasks")
+    result = db.session.execute(sql, {})
+    all_tasks = result.fetchall()
+    return render_template("dashboard.html", all_tasks=all_tasks[-10:])
 
 @app.route("/flat/<int:id>", methods=["GET"])
 def page(id):

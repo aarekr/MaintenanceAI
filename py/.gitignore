@@ -1,6 +1,8 @@
 .env
 __pycache__
 venv
+chatbot_env
+/.env
 
 log.html
 output.xml
