@@ -40,7 +40,13 @@ app.layout = html.Div(children=[
     dcc.Graph(id='example-graph-2', figure=fig_2_residents),
     dcc.Graph(id='example-graph-3', figure=fig_3_residents),
     dcc.Graph(id='example-graph-4', figure=fig_4_residents),
-    dcc.Graph(id='example-graph-5', figure=fig_5_residents)
+    dcc.Graph(id='example-graph-5', figure=fig_5_residents),
+    dcc.Dropdown(id="dropdown", multi=True,
+                 options=[{"label": "1 resident", "value": "1 resident"},
+                          {"label": "2 residents", "value": "2 residents"},
+                          {"label": "3 residents", "value": "3 residents"},
+                          {"label": "4 residents", "value": "4 residents"},
+                          {"label": "5 residents", "value": "5 residents"}])
 ])
 
 if __name__ == '__main__':
