@@ -1,21 +1,25 @@
 # MaintenanceAI
 
 ### Structure
-#### Functional
+##### Functional
 * chat folder has the Sami chatbot advising maintenance employees how to service the devices
 * py folder has the main application code
-#### Under construction
+##### Under construction
 * dashboard folder contains dashboard where live breakdowns and services are shown (under construction)
 * estimator folder contains breakdown simulation and will have machine learning tools for estimation (under construction)
-#### Attempts and ended development
+##### Attempts and ended development
 * chatbot folder has an OpenAI chatbot attempt (not functional and not developed)
 * dialochat has Microsoft chatbot attempt (not functional and not developed)
 * frontend folder contains the early phase of the project written in React (development ended)
 
+### Demo videos
+* app (silent): (https://www.youtube.com/watch?v=Hp8IHsjtmWg)
+* chat (with explanation in English): (https://www.youtube.com/watch?v=ClupuYOXtRo)
+
 ### Starting the chat
+* Some files are not included in the repo
 * Train the model with: python3 train.py
 * Run the app with: python3 app.py
-* Some files are not included in the repo
 
 ### Starting the Python application
 * Activate venv with: source venv/bin/activate
